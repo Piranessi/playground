@@ -1,6 +1,3 @@
-// l6.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
 #include <stdlib.h>
 #include <iostream>
@@ -102,7 +99,7 @@ double * SumOfArrays(const double * arrayPointer, const double * arrayPointer2, 
 
 	auto *resultArray = new double[biggerSize];
 
-	for(auto i = 0 ; i < biggerSize ; i++) // mo¿na znacznie lepiej, lecz nie ma sensu traciæ czasu
+	for(auto i = 0 ; i < biggerSize ; i++) // moÂ¿na znacznie lepiej, lecz nie ma sensu traciÃ¦ czasu
 	{
 		resultArray[i] = 0;
 
