@@ -11,7 +11,7 @@ Each digit must be separated by space.
 
 Example:
 
-4 1 3 // a square matrix 4x4, start point = 1, sought point = 3
+4 1 3 // A square matrix 4x4, start point = 1, sought point = 3
 0 1 0 1
 0 0 0 0
 0 0 0 0
