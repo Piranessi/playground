@@ -99,7 +99,7 @@ double * SumOfArrays(const double * arrayPointer, const double * arrayPointer2, 
 
 	auto *resultArray = new double[biggerSize];
 
-	for(auto i = 0 ; i < biggerSize ; i++) // mo¿na znacznie lepiej, lecz nie ma sensu traciæ czasu
+	for(auto i = 0 ; i < biggerSize ; i++)
 	{
 		resultArray[i] = 0;
 
