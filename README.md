@@ -16,5 +16,6 @@ The 1st point is connected with 2nd and 4th points.
 The 2nd point is not connected with any points.
 The 3rd point is not connected with any points.
 The 4th point is connected with 3rd point.
+
 Program will return true with provided data.
 Path: 1->4->3
