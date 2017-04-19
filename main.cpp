@@ -11,9 +11,7 @@ void NumberCounter(int size, int * result, std::string * files)
 	std::fstream file;
 
 	for (auto i = 0; i < size * NUMBERS_AMOUNT; ++i)
-	{
 		result[i] = 0;
-	}
 
 	for (auto i = 0; i < size; ++i)
 	{
@@ -25,17 +23,8 @@ void NumberCounter(int size, int * result, std::string * files)
 		while (!file.eof())
 		{
 			std::getline(file, tmp);
-			if (atoi(tmp.c_str()) == 0) result[i * NUMBERS_AMOUNT]++;
-			else if (atoi(tmp.c_str()) == 1) result[i * NUMBERS_AMOUNT + 1]++;
-			else if (atoi(tmp.c_str()) == 2) result[i * NUMBERS_AMOUNT + 2]++;
-			else if (atoi(tmp.c_str()) == 3) result[i * NUMBERS_AMOUNT + 3]++;
-			else if (atoi(tmp.c_str()) == 4) result[i * NUMBERS_AMOUNT + 4]++;
-			else if (atoi(tmp.c_str()) == 5) result[i * NUMBERS_AMOUNT + 5]++;
-			else if (atoi(tmp.c_str()) == 6) result[i * NUMBERS_AMOUNT + 6]++;
-			else if (atoi(tmp.c_str()) == 7) result[i * NUMBERS_AMOUNT + 7]++;
-			else if (atoi(tmp.c_str()) == 8) result[i * NUMBERS_AMOUNT + 8]++;
-			else if (atoi(tmp.c_str()) == 9) result[i * NUMBERS_AMOUNT + 9]++;
-			else if (atoi(tmp.c_str()) == 10) result[i * NUMBERS_AMOUNT + 10]++;
+			for (int j = 0; j < NUMBERS_AMOUNT; ++j)
+				if (atoi(tmp.c_str()) == j) result[i * NUMBERS_AMOUNT + j]++;
 		}
 
 		file.close();
@@ -49,9 +38,7 @@ void MaxResult(std::string * files, int * resultMax, int size)
 	int arrayTmp[NUMBERS_AMOUNT_IN_FILE];
 
 	for (auto i = 0; i < size * NUMBERS_AMOUNT; ++i)
-	{
 		resultMax[i] = 0;
-	}
 
 	for (auto i = 0; i < size; ++i)
 	{
@@ -110,15 +97,13 @@ void FilesWrite(std::string * files, const int size)
 		files[i] = "plik_" + std::to_string(i + 1) + ".txt";
 
 		file.open(files[i], std::ios::out);
-			if (!file.good())
-				throw new std::exception("B³¹d podczas otwierania pliku");
+		if (!file.good())
+			throw new std::exception("B³¹d podczas otwierania pliku");
 
-			for (auto j = 0; j < (NUMBERS_AMOUNT_IN_FILE - 1); ++j)
-			{
-				file << (0 + (rand() % NUMBERS_AMOUNT)) << std::endl;
-			}
+		for (auto j = 0; j < (NUMBERS_AMOUNT_IN_FILE - 1); ++j)
+			file << (0 + (rand() % NUMBERS_AMOUNT)) << std::endl;
 
-			file << (0 + (rand() % NUMBERS_AMOUNT));
+		file << (0 + (rand() % NUMBERS_AMOUNT));
 		file.close();
 	}
 }
@@ -128,20 +113,20 @@ void MakeResult(std::string * files, int *result, int * resultMax, const int siz
 	std::fstream file;
 
 	file.open("Results.txt", std::ios::out);
-		if (!file.good())
-			throw new std::exception("Error while opening file");
+	if (!file.good())
+		throw new std::exception("Error while opening file");
 
-		for (auto i = 0; i < size; ++i)
+	for (auto i = 0; i < size; ++i)
+	{
+		file << "Wyniki z " << files[i] << std::endl;
+		for (auto j = 0; j < NUMBERS_AMOUNT; j++)
 		{
-			file << "Wyniki z " << files[i] << std::endl;
-			for (auto j = 0; j < NUMBERS_AMOUNT; j++)
-			{
-				file << "Dla " << j << " - iloœæ wyst¹pieñ: " << result[i * NUMBERS_AMOUNT + j]
-					<< " # max wyst¹pieñ z rzêdu: " << resultMax[i * NUMBERS_AMOUNT + j]
-					<< std::endl;
-			}
-			file << std::endl;
+			file << "Dla " << j << " - iloœæ wyst¹pieñ: " << result[i * NUMBERS_AMOUNT + j]
+				<< " # max wyst¹pieñ z rzêdu: " << resultMax[i * NUMBERS_AMOUNT + j]
+				<< std::endl;
 		}
+		file << std::endl;
+	}
 	file.close();
 }
 
