@@ -23,7 +23,7 @@ void NumberCounter(int size, int * result, std::string * files)
 		while (!file.eof())
 		{
 			std::getline(file, tmp);
-			for (int j = 0; j < NUMBERS_AMOUNT; ++j)
+			for (auto j = 0; j < NUMBERS_AMOUNT; ++j)
 				if (atoi(tmp.c_str()) == j) result[i * NUMBERS_AMOUNT + j]++;
 		}
 
@@ -98,7 +98,7 @@ void FilesWrite(std::string * files, const int size)
 
 		file.open(files[i], std::ios::out);
 		if (!file.good())
-			throw new std::exception("B³¹d podczas otwierania pliku");
+			throw new std::exception("BÂ³Â¹d podczas otwierania pliku");
 
 		for (auto j = 0; j < (NUMBERS_AMOUNT_IN_FILE - 1); ++j)
 			file << (0 + (rand() % NUMBERS_AMOUNT)) << std::endl;
@@ -121,8 +121,8 @@ void MakeResult(std::string * files, int *result, int * resultMax, const int siz
 		file << "Wyniki z " << files[i] << std::endl;
 		for (auto j = 0; j < NUMBERS_AMOUNT; j++)
 		{
-			file << "Dla " << j << " - iloœæ wyst¹pieñ: " << result[i * NUMBERS_AMOUNT + j]
-				<< " # max wyst¹pieñ z rzêdu: " << resultMax[i * NUMBERS_AMOUNT + j]
+			file << "Dla " << j << " - iloÅ“Ã¦ wystÂ¹pieÃ±: " << result[i * NUMBERS_AMOUNT + j]
+				<< " # max wystÂ¹pieÃ± z rzÃªdu: " << resultMax[i * NUMBERS_AMOUNT + j]
 				<< std::endl;
 		}
 		file << std::endl;
