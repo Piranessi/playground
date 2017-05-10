@@ -15,21 +15,19 @@ class CRUD
 {
 	std::string databaseName;
 	std::fstream file;
-
-public:
-	explicit CRUD(std::string databaseName);
-	~CRUD();
-
 	std::vector<Contacts> database;
 
 	void ReadAll();
 	void Save();
-	void Menu();
 	void Refresh(int &i);
-
 	void Create();
 	void Read(int index);
 	void Update(int index);
 	void Delete(int index);
+
+public:
+	explicit CRUD(std::string databaseName);
+	~CRUD();
+	void Menu();
 };
 
