@@ -90,8 +90,6 @@ void GameScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsRectItem rectType;
     QGraphicsEllipseItem ellipseType;
-
-    // resetowanie pionkow
     if ( itemAt(event->scenePos(), QTransform::fromScale(1, 1))->type() == ellipseType.type() && this->isPawnSelected )
     {
         if ( itemAt(event->scenePos(), QTransform::fromScale(1, 1))->pos() == this->currentlySelectedPawn->pos() && this->whitePlayerMove )
@@ -110,8 +108,6 @@ void GameScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
             return;
         }
     }
-
-    //pionek zaznaczony, klikniecie w pole
     if( itemAt(event->scenePos(), QTransform::fromScale(1, 1))->type() == rectType.type() && this->isPawnSelected )
     {
         for (int i = 0 ; i < blackFieldsList.size() ; i++)
@@ -162,10 +158,8 @@ void GameScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
                     }
                     else if ( this->currentlySelectedPawn->scenePos() == whitePawnsList.at(j)->pawn->scenePos()
                               && whitePawnsList.at(j)->isKing == true)
-                    {
+                        { if (FieldChecker4King()) {qInfo() << "move for king pawn is available"; }
 
-                        // tu dla damki ruchy
-                    }
                 }
             }
             else
@@ -214,10 +208,7 @@ void GameScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
                     }
                     else if ( this->currentlySelectedPawn->scenePos() == blackPawnsList.at(j)->pawn->scenePos()
                               && blackPawnsList.at(j)->isKing == true)
-                    {
-
-                        // tu dla damki ruchy
-                    }
+                    { if (FieldChecker4King()) {qInfo() << "move for king pawn is available"; }
                 }
             }
         }
@@ -254,6 +245,74 @@ bool GameScene::PosChecker(QGraphicsSceneMouseEvent *event, int currentlySPX, in
             && itemAt(event->scenePos(), QTransform::fromScale(1, 1))->pos().y() == this->currentlySelectedPawn->pos().y()+currentlySPY
             && itemAt(event->scenePos(), QTransform::fromScale(1, 1))->pos().x() == blackFieldsList.at(i)->pos().x()
             && itemAt(event->scenePos(), QTransform::fromScale(1, 1))->pos().y() == blackFieldsList.at(i)->pos().y();
+    return result;
+}
+
+bool GameScene::FieldChecker4King(QGraphicsSceneMouseEvent * event)
+{
+    bool result = (CheckIfMoveAvailable(this->currentlySelectedPawn->pos(), ELEMENTSIZE, ELEMENTSIZE, event)
+            || CheckIfMoveAvailable(this->currentlySelectedPawn->pos(), ELEMENTSIZE, -ELEMENTSIZE, event)
+            || CheckIfMoveAvailable(this->currentlySelectedPawn->pos(), -ELEMENTSIZE, ELEMENTSIZE, event)
+            || CheckIfMoveAvailable(this->currentlySelectedPawn->pos(), -ELEMENTSIZE, -ELEMENTSIZE, event));
+    return result;
+}
+
+bool GameScene::CheckIfMoveAvailable(QPointF xy, int xAdd, int yAdd, QGraphicsSceneMouseEvent *event)
+{
+    QGraphicsRectItem rectType;
+    QGraphicsEllipseItem ellipseType;
+    bool result = false;
+    if (this->whitePlayerMove)
+    {
+        if( xy.x()+15+xAdd > 480 || xy.x()+15+xAdd < 0 || xy.y()+15+yAdd > 480 || xy.y()+15+yAdd < 0) { return false; }
+        if( xy.x()+15+xAdd*2 > 480 || xy.x()+15+xAdd*2 < 0 || xy.y()+15+yAdd*2 > 480 || xy.y()+15+yAdd*2 < 0) { return false; }
+        if(itemAt(xy.x()+15+xAdd, xy.y()+15+yAdd, QTransform::fromScale(1, 1))->type() == rectType.type())
+        {
+            result = CheckIfMoveAvailable(itemAt(xy.x()+15+xAdd, xy.y()+15+yAdd, QTransform::fromScale(1, 1))->pos(), xAdd, yAdd, event);
+        }
+        else if (itemAt(xy.x()+15+xAdd, xy.y()+15+yAdd, QTransform::fromScale(1, 1))->type() == ellipseType.type())
+        {
+            if (this->whitePlayerMove)
+            {
+                for(int i = 0 ; i < blackPawnsList.size() ; ++i)
+                {
+                    if (blackPawnsList.at(i)->pawn->scenePos() == itemAt(xy.x()+15+xAdd, xy.y()+15+yAdd, QTransform::fromScale(1, 1))->pos())
+                    {
+                        if (itemAt(xy.x()+15+xAdd*2, xy.y()+15+yAdd*2, QTransform::fromScale(1, 1))->type() == rectType.type())
+                        {
+                            if (1 || itemAt(event->pos().x(), event->pos().y(), QTransform::fromScale(1, 1))->pos() == itemAt(xy.x()+15+xAdd*2, xy.y()+15+yAdd*2, QTransform::fromScale(1, 1))->pos())
+                            {
+                                this->currentlySelectedPawn->setPos(50, 50);
+                                this->removeItem(blackPawnsList.at(i)->pawn);
+                                blackPawnsList.removeAt(i);
+                            }
+                            result = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for(int i = 0 ; i < whitePawnsList.size() ; ++i)
+                {
+                    if (whitePawnsList.at(i)->pawn->scenePos() == itemAt(xy.x()+15+xAdd, xy.y()+15+yAdd, QTransform::fromScale(1, 1))->pos())
+                    {
+                        if (itemAt(xy.x()+15+xAdd*2, xy.y()+15+yAdd*2, QTransform::fromScale(1, 1))->type() == rectType.type())
+                        {
+                            if (itemAt(event->pos().x(), event->pos().y(), QTransform::fromScale(1, 1))->pos() == itemAt(xy.x()+15+xAdd*2, xy.y()+15+yAdd*2, QTransform::fromScale(1, 1))->pos())
+                            {
+                                this->currentlySelectedPawn->setPos(itemAt(event->pos().x(), event->pos().y(), QTransform::fromScale(1, 1))->pos());
+                                this->removeItem(whitePawnsList.at(i)->pawn);
+                                whitePawnsList.removeAt(i);
+                            }
+                            result = true;
+                        }
+                    }
+                }
+            }
+
+        }
+    }
     return result;
 }
 
@@ -310,44 +369,28 @@ void GameScene::ResetPawn()
     this->isDuringMove = !this->isDuringMove;
 }
 
-void GameScene::mouseMoveEvent(QGraphicsSceneMouseEvent *ev)
-{
-    static int klikniecie;
-    qInfo() << ev->scenePos() << klikniecie++;
-}
-
-//
-// tu
-// stanie sie damka, jezeli bedzie na samej gorze, lub dole odp dla koloru,
-// oraz nie bedzie podczas ruchu
 void GameScene::CheckIfKing()
-{ // podczas zakończenia cyklu ruchów, sprawdź, czy biały pionek jest na kordach y==0, lub czarny
-    if(this->whitePlayerMove)
-    {
+{
         for(int i = 0 ; i < whitePawnsList.size() ; ++i)
         {
             if(this->currentlySelectedPawn->scenePos().y() == 0
                && this->currentlySelectedPawn->scenePos() == whitePawnsList.at(i)->pawn->scenePos())
             {
+                if (this->whitePawnsList.at(i)->isKing) { return; }
                 this->whitePawnsList.at(i)->isKing = true;
-                this->blackPawnsList.at(i)->pawn->setBrush(this->whiteKingBrush);
-                qInfo() << "tworzenie bialej damki";
+                this->whitePawnsList.at(i)->pawn->setBrush(this->whiteKingBrush);
             }
         }
-    }
-    else
-    {
         for(int i = 0 ; i < blackPawnsList.size() ; ++i)
         {
             if(this->currentlySelectedPawn->scenePos().y() == 7*ELEMENTSIZE
                && this->currentlySelectedPawn->scenePos() == blackPawnsList.at(i)->pawn->scenePos())
             {
+                if (this->blackPawnsList.at(i)->isKing) { return; }
                 this->blackPawnsList.at(i)->isKing = true;
                 this->blackPawnsList.at(i)->pawn->setBrush(this->blackKingBrush);
-                qInfo() << "tworzenie czarnej damki";
             }
         }
-    }
 }
 
 void GameScene::Moves(QGraphicsSceneMouseEvent *event, int numX, int numY)
@@ -407,5 +450,3 @@ void GameScene::Moves(QGraphicsSceneMouseEvent *event, int numX, int numY)
         }
     }
 }
-
-// dziwny blad przy tworzeniu bialej damki
