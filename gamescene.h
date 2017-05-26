@@ -28,6 +28,8 @@ class GameScene : public QGraphicsScene
     bool PosChecker(QGraphicsSceneMouseEvent *event, int currentlySPX, int currentlySPY, int i);
     bool FieldChecker(int numX, int numY);
     bool PawnChecker(int numX, int numY);
+    bool FieldChecker4King();
+    bool CheckIfMoveAvailable(QPointF xy, int xAdd, int yAdd, QGraphicsSceneMouseEvent *event);
     void CheckIfKing ();
     void SetPawns(QGraphicsScene* scene);
     void SetChessboard(QGraphicsScene* scene);
@@ -35,7 +37,6 @@ class GameScene : public QGraphicsScene
     void Moves(QGraphicsSceneMouseEvent *event, int numX, int numY);
 
 protected:
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *ev);
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
 
 public:
