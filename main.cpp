@@ -17,7 +17,7 @@
 // .#.
 // ...
 //
-// Where '#' is wall, true is ground (possible to pass)
+// Where '#' is wall, '.' is ground (possible to pass)
 //
 
 struct Cell
