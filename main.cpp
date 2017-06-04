@@ -69,12 +69,12 @@ int main()
 			GetMatrixSizes(&rSize, &cSize, &file);
 			auto * arrayOfCells = new Cell[rSize * cSize];
 			SetupArrOfStructs(arrayOfCells, rSize, cSize, &wallCount, &file, CHAR);
+			PrintMap(arrayOfCells, rSize, cSize, CHAR);
 			SetConnections(arrayOfCells, rSize, cSize);
 			for (int j = 0; j < rSize*cSize; ++j)
 			{
-				SetPathLength(arrayOfCells, j, rSize + cSize + (rSize > cSize ? wallCount / (rSize - 1) : wallCount / (cSize - 1)));
+				SetPathLength(arrayOfCells, j, rSize + cSize + wallCount);
 			}
-			PrintMap(arrayOfCells, rSize, cSize, CHAR);
 			PrintDistances(arrayOfCells, rSize, cSize);
 			std::cout << std::endl << std::endl;
 			// end work with file & delete array
