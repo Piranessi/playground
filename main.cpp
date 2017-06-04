@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -27,7 +27,7 @@ struct Cell
 	int distance;
 };
 
-bool CanGo(Cell * cell);
+bool CanGo(Cell * cell, std::vector<Cell *> vek);
 
 std::string LoadContentString(std::fstream * file, int cSize);
 
@@ -37,7 +37,7 @@ void PrintDistances(Cell * arr, int rSize, int cSize);
 
 void PrintMap(Cell * arr, int rSize, int cSize, char ch);
 
-void SetPathLengths(Cell * arr, int rSize, int cSize, int wallCount);
+void SetPathLength(Cell * arr, int i, int invokeLimit);
 
 void SetConnections(Cell * arr, int rSize, int cSize);
 
@@ -70,7 +70,10 @@ int main()
 			auto * arrayOfCells = new Cell[rSize * cSize];
 			SetupArrOfStructs(arrayOfCells, rSize, cSize, &wallCount, &file, CHAR);
 			SetConnections(arrayOfCells, rSize, cSize);
-			SetPathLengths(arrayOfCells, rSize, cSize, wallCount);
+			for (int j = 0; j < rSize*cSize; ++j)
+			{
+				SetPathLength(arrayOfCells, j, rSize + cSize + (rSize > cSize ? wallCount / (rSize - 1) : wallCount / (cSize - 1)));
+			}
 			PrintMap(arrayOfCells, rSize, cSize, CHAR);
 			PrintDistances(arrayOfCells, rSize, cSize);
 			std::cout << std::endl << std::endl;
@@ -91,13 +94,16 @@ void CreateConnection(Cell * cell, int i, bool up, bool down, bool left, bool ri
 	cell[i].right_Cell = right ? &cell[d] : NULL;
 }
 
-bool CanGo(Cell * cell)
+bool CanGo(Cell * cell, std::vector<Cell*> vek)
 {
-	return cell != NULL && cell->value == true ? true : false;
+	if (cell == NULL || cell->value == false) { return false; }
+	for (int i = 0; i < vek.size(); ++i){ if (cell == vek.at(i)) { return false; } }
+	return true;
 }
-
+int test = 0;
 void Go(Cell * cell, Cell * target, std::vector<Cell*> vek, int result, bool isFinished, int invokeCounter, int invokeLimit, int resultLimit, int * resultCounter)
 {
+	std::cout << ++test << std::endl;
 	if (invokeCounter > invokeLimit) { return; }
 	++invokeCounter;
 	if (target->distance > 0 && target->distance < result && *resultCounter > resultLimit) { return; }
@@ -112,31 +118,13 @@ void Go(Cell * cell, Cell * target, std::vector<Cell*> vek, int result, bool isF
 	if (isFinished == false)
 	{
 		++result;
-		bool checker;
-		if (CanGo(cell->right_Cell))
-		{
-			checker = true;
-			for (int i = 0; i < vek.size() && checker == true; ++i) { if (cell->right_Cell == vek.at(i)) { checker = false; } }
-			if (checker == true) { Go(cell->right_Cell, target, vek, result, isFinished, invokeCounter, invokeLimit, resultLimit, resultCounter); }
-		}
-		if (CanGo(cell->down_Cell))
-		{
-			checker = true;
-			for (int i = 0; i < vek.size() && checker == true; ++i) { if (cell->down_Cell == vek.at(i)) { checker = false; } }
-			if (checker == true) { Go(cell->down_Cell, target, vek, result, isFinished, invokeCounter, invokeLimit, resultLimit, resultCounter); }
-		}
-		if (CanGo(cell->left_Cell))
-		{
-			checker = true;
-			for (int i = 0; i < vek.size() && checker == true; ++i) { if (cell->left_Cell == vek.at(i)) { checker = false; } }
-			if (checker == true) { Go(cell->left_Cell, target, vek, result, isFinished, invokeCounter, invokeLimit, resultLimit, resultCounter); }
-		}
-		if (CanGo(cell->up_Cell))
-		{
-			checker = true;
-			for (int i = 0; i < vek.size() && checker == true; ++i) { if (cell->up_Cell == vek.at(i)) { checker = false; } }
-			if (checker == true) { Go(cell->up_Cell, target, vek, result, isFinished, invokeCounter, invokeLimit, resultLimit, resultCounter); }
-		}
+		if (CanGo(cell->right_Cell, vek))
+		{ Go(cell->right_Cell, target, vek, result, isFinished, invokeCounter, invokeLimit, resultLimit, resultCounter); }
+		if (CanGo(cell->down_Cell, vek))
+		{ Go(cell->down_Cell, target, vek, result, isFinished, invokeCounter, invokeLimit, resultLimit, resultCounter); }
+		if (CanGo(cell->left_Cell, vek))
+		{ Go(cell->left_Cell, target, vek, result, isFinished, invokeCounter, invokeLimit, resultLimit, resultCounter); }
+		if (CanGo(cell->up_Cell, vek)) { Go(cell->up_Cell, target, vek, result, isFinished, invokeCounter, invokeLimit, resultLimit, resultCounter); }
 	}
 }
 
@@ -165,16 +153,12 @@ void PrintMap(Cell * arr, int rSize, int cSize, char ch)
 	}
 }
 
-void SetPathLengths(Cell * arr, int rSize, int cSize, int wallCount)
+void SetPathLength(Cell * arr, int i, int invokeLimit)
 {
 	int resultCounter = 0;
-	for (int j = 0; j < rSize * cSize; ++j)
-	{
-		bool isFinished = false;
-		std::vector<Cell *> tmpV;
-		Go(arr, &arr[j], tmpV, 0, isFinished, 0,
-			rSize + cSize + (rSize > cSize ? wallCount / (rSize - 1) : wallCount / (cSize - 1)), RLIMIT, &resultCounter);
-	}
+	bool isFinished = false;
+	std::vector<Cell *> tmpV;
+	Go(arr, &arr[i], tmpV, 0, isFinished, 0, invokeLimit, RLIMIT, &resultCounter);
 }
 
 void SetConnections(Cell * arr, int rSize, int cSize)
@@ -184,41 +168,23 @@ void SetConnections(Cell * arr, int rSize, int cSize)
 		if (arr[i].value == true)
 		{
 			if (i == 0) // top-left corner
-			{
-				CreateConnection(arr, i, false, true, false, true, NULL, cSize, NULL, 1);
-			}
+			{ CreateConnection(arr, i, false, true, false, true, NULL, cSize, NULL, 1); }
 			else if (i == cSize - 1) // top-right corner
-			{
-				CreateConnection(arr, i, false, true, true, false, NULL, i + cSize, i - 1, NULL);
-			}
+			{ CreateConnection(arr, i, false, true, true, false, NULL, i + cSize, i - 1, NULL); }
 			else if (i == cSize * (rSize - 1)) // bottom-left corner
-			{
-				CreateConnection(arr, i, true, false, false, true, i - cSize, NULL, NULL, i + 1);
-			}
+			{ CreateConnection(arr, i, true, false, false, true, i - cSize, NULL, NULL, i + 1); }
 			else if (i == rSize * cSize - 1) // bottom-right corner
-			{
-				CreateConnection(arr, i, true, false, true, false, i - cSize, NULL, i - 1, NULL);
-			}
+			{ CreateConnection(arr, i, true, false, true, false, i - cSize, NULL, i - 1, NULL); }
 			else if (i > 0 && i < cSize - 1) // top (except left & right corners)
-			{
-				CreateConnection(arr, i, false, true, true, true, NULL, i + cSize, i - 1, i + 1);
-			}
+			{ CreateConnection(arr, i, false, true, true, true, NULL, i + cSize, i - 1, i + 1); }
 			else if (i > cSize * (rSize - 1) && i < rSize * cSize - 1) // bottom (except left & right corners)
-			{
-				CreateConnection(arr, i, true, false, true, true, i - cSize, NULL, i - 1, i + 1);
-			}
+			{ CreateConnection(arr, i, true, false, true, true, i - cSize, NULL, i - 1, i + 1); }
 			else if (i > 0 && i < cSize * (rSize - 1) && i % cSize == 0) // left (except top & bottom corners)
-			{
-				CreateConnection(arr, i, true, true, false, true, i - cSize, i + cSize, NULL, i + 1);
-			}
+			{ CreateConnection(arr, i, true, true, false, true, i - cSize, i + cSize, NULL, i + 1); }
 			else if (i >(cSize - 1) && i < (cSize * rSize - 1) && ((i + 1) % cSize) == 0) // right (except top & bottom corners)
-			{
-				CreateConnection(arr, i, true, true, true, false, i - cSize, i + cSize, i - 1, NULL);
-			}
+			{ CreateConnection(arr, i, true, true, true, false, i - cSize, i + cSize, i - 1, NULL); }
 			else
-			{
-				CreateConnection(arr, i, true, true, true, true, i - cSize, i + cSize, i - 1, i + 1);
-			}
+			{ CreateConnection(arr, i, true, true, true, true, i - cSize, i + cSize, i - 1, i + 1); }
 		}
 	}
 }
