@@ -100,10 +100,9 @@ bool CanGo(Cell * cell, std::vector<Cell*> vek)
 	for (int i = 0; i < vek.size(); ++i){ if (cell == vek.at(i)) { return false; } }
 	return true;
 }
-int test = 0;
+
 void Go(Cell * cell, Cell * target, std::vector<Cell*> vek, int result, bool isFinished, int invokeCounter, int invokeLimit, int resultLimit, int * resultCounter)
 {
-	std::cout << ++test << std::endl;
 	if (invokeCounter > invokeLimit) { return; }
 	++invokeCounter;
 	if (target->distance > 0 && target->distance < result && *resultCounter > resultLimit) { return; }
