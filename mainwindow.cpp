@@ -160,10 +160,12 @@ void MainWindow::TextCorrect()
 
     for(int i = 0; i < text.length()-2; i++)
     {
-        if(text.at(i) == '.')
-            if(text.at(i+1) == ' ' || text.at(i+1) == '\n')
-                if(text.at(i+2) >= 'a' && text.at(i+2) <= 'z')
-                    text[i+2] = text.at(i+2).toUpper();
+        if(text.at(i) == '.'
+          && (text.at(i+1) == ' ' || text.at(i+1) == '\n')
+          && (text.at(i+2) >= 'a' && text.at(i+2) <= 'z'))
+        {
+            text[i+2] = text.at(i+2).toUpper();
+        }
     }
 
     ui->textEdit->setText(text);
