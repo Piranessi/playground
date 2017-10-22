@@ -46,7 +46,6 @@ int main(void)
     BubblSort(structForTask, SIZE);
     charCount = CountChars(structForTask, SIZE, CHAR );
 
-
     howManyShow = 20 > SIZE ? SIZE : 20;
     for (uint8_t i = 0 ; i < howManyShow ; ++i)
     {
@@ -127,7 +126,7 @@ StructForLab ** RandomLab(const uint16_t cu16SizeP)
 
 static void ReleaseMemory(StructForLab ** const cpArrayP, const uint16_t cu16SizeP)
 {
-    for (uint16_t i = 0 ; i < cu16SizeP ; ++i) { delete cpArrayP[i]; }
+    for (uint16_t i = 0 ; i < cu16SizeP ; ++i) { delete [] cpArrayP[i]; }
     delete [] cpArrayP;
 }
 
@@ -189,6 +188,7 @@ static void BubblSort(StructForLab ** const cpArrayP, const uint16_t cu16SizeP)
 {
     bool shouldBreak = true;
     StructForLab * cpTmpL;
+    std::cout << "test";
 
     for (uint16_t it1 = 1; it1 < cu16SizeP; ++it1)
     {
