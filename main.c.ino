@@ -27,7 +27,7 @@ int termocouple_bottom_SCK = 14;
 
 int cnt_temp_sensor = TEMPERATURE_SENSORS_SKIP_IN_MS;
 int very_fucking_careful_stage_dif_degrees = 15;
-int very_careful_heating_time = 2;
+int very_careful_heating_time = 6;
 int careful_heating_time = 10;
 int temp_dif_bot_target_current = 0;
 
@@ -128,16 +128,16 @@ void sensor_temperature_bottom()
     temperature_bottom_current_prev = temperature_bottom_current;
     temperature_bottom_current = (int)thermocouple->readCelsius();
 
-    // protection against random data on thermocouple on gpio
-    if (((temperature_bottom_current_prev > temperature_bottom_current)
-            && ((temperature_bottom_current_prev - temperature_bottom_current) > histeresis_coeff))
-        || ((temperature_bottom_current_prev < temperature_bottom_current)
-               && ((temperature_bottom_current - temperature_bottom_current_prev)
-                      > histeresis_coeff)))
-    {
-        temperature_bottom_current = temperature_bottom_current_prev;
-        errorOccured();
-    }
+//    // protection against random data on thermocouple on gpio
+//    if (((temperature_bottom_current_prev > temperature_bottom_current)
+//            && ((temperature_bottom_current_prev - temperature_bottom_current) > histeresis_coeff))
+//        || ((temperature_bottom_current_prev < temperature_bottom_current)
+//               && ((temperature_bottom_current - temperature_bottom_current_prev)
+//                      > histeresis_coeff)))
+//    {
+//        temperature_bottom_current = temperature_bottom_current_prev;
+//        errorOccured();
+//    }
 }
 int time_from_last_stop()
 {
@@ -161,6 +161,26 @@ void heating_handler()
         stop_time_from_system_up_in_seconds = time_from_system_up_in_seconds;
     }
 
+
+    /* tt = target temperature, tc = temperature current, na wykresie x to tc
+     * if tc == tt (1) && tc spadlo ponizej tt(zaraz za 2) && tc > tt (zaraz za 3) -> zmniejsz czas grzania
+     * 
+     * ^[temperature]
+     * |
+     * |        xxxxxx       xx
+     * |       x      xx    x  xx     x     x         x
+     * |------x---------x--x-----x---x-x-xxx-xxx-xxxxx-xxxxxxxxxx(temperature target)
+     * |     x           xx       x x   x       x
+     * |    x                      x
+     * |   x  1         2  3     4   5 6 
+     * |  x
+     * | x
+     * |x
+     * |_________________________________________________________> [t]
+     * 
+     */
+
+
     if ((temp_dif_bot_target_current > very_fucking_careful_stage_dif_degrees)
         && (time_from_last_stop() < careful_heating_time))
     {
@@ -168,7 +188,7 @@ void heating_handler()
         SerialBT.println(
             "hEAT=ON careful for " + (String)time_left_heating(careful_heating_time) + " sec.");
     }
-    else if ((temp_dif_bot_target_current > 1)) && (time_from_last_stop() < very_careful_heating_time))
+    else if ((temp_dif_bot_target_current > 1) && (time_from_last_stop() < very_careful_heating_time))
         {
             digitalWrite(POWER_SOURCE_PIN, HIGH);
             SerialBT.println("hEAT=ON very fucking careful for "
@@ -181,7 +201,6 @@ void heating_handler()
     }
 }
 
-
 void task_heat(int time_ms)
 {
     if (true) // cnt_temp_sensor == time_ms)
@@ -189,22 +208,13 @@ void task_heat(int time_ms)
         --cnt_temp_sensor;
         heating_handler();
     }
-    else if (cnt_temp_sensor == 0)
-    {
-        cnt_temp_sensor = TEMPERATURE_SENSORS_SKIP_IN_MS;
-    }
-    else
-    {
-        --cnt_temp_sensor;
-    }
+    else if (cnt_temp_sensor == 0) cnt_temp_sensor = TEMPERATURE_SENSORS_SKIP_IN_MS;
+    else --cnt_temp_sensor;
 }
 
 void BT_print_x_lines(unsigned int amount)
 {
-    for (int i = 0; i < amount; ++i)
-    {
-        SerialBT.println("");
-    }
+    for (int i = 0; i < amount; ++i) SerialBT.println("");
 }
 
 void loop()
