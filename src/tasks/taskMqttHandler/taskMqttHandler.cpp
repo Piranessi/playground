@@ -6,7 +6,6 @@
 
 String msg_shutters = "";
 bool controllerDidRequest = false;
-bool lfeEnabled = true;
 
 shuttersStruct *shuttersStructObj;
 
@@ -33,7 +32,7 @@ void messageHandler(char* topic, byte* payload, unsigned int length)
     Serial.print(controllerDidRequest);
   } else if(deserializedPayload == "lfe_1"){
     shuttersStructObj->lfeEnabled = true;
-    Serial.print("\n[taskMqttHandler] lFE: ");
+    Serial.print("\n[taskMqttHandler] lfeEnabled: ");
     Serial.print(shuttersStructObj->lfeEnabled);
   } else if(deserializedPayload == "lfe_0"){
     shuttersStructObj->lfeEnabled = false;
@@ -43,7 +42,6 @@ void messageHandler(char* topic, byte* payload, unsigned int length)
     Serial.print("\n[taskMqttHandler] junk received");
   }
 }
-
 
 void taskMqttHandler(void * parameter){
     vTaskDelay(6000 / portTICK_PERIOD_MS);
