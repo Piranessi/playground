@@ -8,7 +8,7 @@ String msg_shutters = "";
 bool controllerDidRequest = false;
 bool lfeEnabled = true;
 
-shuttersStruct *sscObj;
+shuttersStruct *shuttersStructObj;
 
 void messageHandler(char* topic, byte* payload, unsigned int length)
 {
@@ -32,13 +32,13 @@ void messageHandler(char* topic, byte* payload, unsigned int length)
     Serial.print("\n[taskMqttHandler] controllerDidRequest: ");
     Serial.print(controllerDidRequest);
   } else if(deserializedPayload == "lfe_1"){
-    lfeEnabled = true;
+    shuttersStructObj->lfeEnabled = true;
     Serial.print("\n[taskMqttHandler] lFE: ");
-    Serial.print(lfeEnabled);
+    Serial.print(shuttersStructObj->lfeEnabled);
   } else if(deserializedPayload == "lfe_0"){
-    lfeEnabled = false;
+    shuttersStructObj->lfeEnabled = false;
     Serial.print("\n[taskMqttHandler] lfeEnabled: ");
-    Serial.print(lfeEnabled);
+    Serial.print(shuttersStructObj->lfeEnabled);
   } else {
     Serial.print("\n[taskMqttHandler] junk received");
   }
@@ -57,11 +57,7 @@ void taskMqttHandler(void * parameter){
     net.setPrivateKey(AWS_CERT_PRIVATE);
     client.setServer(AWS_IOT_ENDPOINT, 8883);
     client.setCallback(messageHandler);
-
-    sscObj = (shuttersStruct*)parameter;
-    Serial.println("\n[taskMqttHandler] Lux from sscObj:");
-    Serial.print(sscObj->lightLux);
-
+    shuttersStructObj = (shuttersStruct*)parameter;
 
     for(;;){
         delay(1000);
@@ -74,7 +70,7 @@ void taskMqttHandler(void * parameter){
           }
         }
         Serial.println("\n[taskMqttHandler] Lux from sscObj:");
-        Serial.print(sscObj->lightLux);
+        Serial.print(shuttersStructObj->lightLux);
 
         Serial.print("\n[taskMqttHandler] Client state: ");
         Serial.print(client.state());
