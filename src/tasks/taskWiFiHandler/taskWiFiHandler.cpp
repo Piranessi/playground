@@ -10,8 +10,8 @@ void taskWiFiHandler(void * parameter){
 
     //for now hardcoded
     ((shuttersStruct *)parameter)->preferences.begin("storage", false);
-    ((shuttersStruct *)parameter)->preferences.putString("ssid", "krul_m"); 
-    ((shuttersStruct *)parameter)->preferences.putString("password", "BDJQp!#997"); 
+    ((shuttersStruct *)parameter)->preferences.putString("ssid", "zyku24"); 
+    ((shuttersStruct *)parameter)->preferences.putString("password", "jarecki1!"); 
     ssid = ((shuttersStruct *)parameter)->preferences.getString("ssid"); 
     password = ((shuttersStruct *)parameter)->preferences.getString("password");
     ((shuttersStruct *)parameter)->preferences.end();
@@ -35,7 +35,8 @@ void taskWiFiHandler(void * parameter){
         delay(1000);
         if(WiFi.status() == WL_CONNECTED){
         Serial.print("\n[taskWiFiHandler] WiFi ok.");
-        } else {
+        }
+        else {
           Serial.print("\n[taskWiFiHandler] WiFi connection lost. Reconnecting.");
           while (WiFi.status() != WL_CONNECTED) {
             ((shuttersStruct *)parameter)->state = PossibleStates::INIT;
@@ -43,5 +44,6 @@ void taskWiFiHandler(void * parameter){
             delay(1000);
           }
         }
+
     }
 }
