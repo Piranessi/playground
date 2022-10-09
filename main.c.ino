@@ -161,7 +161,7 @@ void heating_handler()
         stop_time_from_system_up_in_seconds = time_from_system_up_in_seconds;
     }
 
-
+     /*
      * 
      * ^[temperature]
      * |
