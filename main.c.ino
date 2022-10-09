@@ -26,7 +26,7 @@ int termocouple_bottom_SCK = 14;
 // thermocouple hardware status bottom END
 
 int cnt_temp_sensor = TEMPERATURE_SENSORS_SKIP_IN_MS;
-int very_fucking_careful_stage_dif_degrees = 15;
+int very_careful_stage_dif_degrees = 15;
 int very_careful_heating_time = 6;
 int careful_heating_time = 10;
 int temp_dif_bot_target_current = 0;
@@ -162,8 +162,6 @@ void heating_handler()
     }
 
 
-    /* tt = target temperature, tc = temperature current, na wykresie x to tc
-     * if tc == tt (1) && tc spadlo ponizej tt(zaraz za 2) && tc > tt (zaraz za 3) -> zmniejsz czas grzania
      * 
      * ^[temperature]
      * |
@@ -181,7 +179,7 @@ void heating_handler()
      */
 
 
-    if ((temp_dif_bot_target_current > very_fucking_careful_stage_dif_degrees)
+    if ((temp_dif_bot_target_current > very_careful_stage_dif_degrees)
         && (time_from_last_stop() < careful_heating_time))
     {
         digitalWrite(POWER_SOURCE_PIN, HIGH);
@@ -191,7 +189,7 @@ void heating_handler()
     else if ((temp_dif_bot_target_current > 1) && (time_from_last_stop() < very_careful_heating_time))
         {
             digitalWrite(POWER_SOURCE_PIN, HIGH);
-            SerialBT.println("hEAT=ON very fucking careful for "
+            SerialBT.println("hEAT=ON very careful for "
                 + (String)time_left_heating(very_careful_heating_time) + " sec.");
         }
     else
