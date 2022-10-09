@@ -3,7 +3,7 @@ import { Button, StyleSheet, Text, View, Switch } from 'react-native';
 import { Amplify, PubSub, Auth } from 'aws-amplify';
 import { AWSIoTProvider } from '@aws-amplify/pubsub';
 import awsexport from './exp/aws-export' 
-import { useState, Component } from 'react';
+import { useState } from 'react';
 
 
 interface MQTTData {
