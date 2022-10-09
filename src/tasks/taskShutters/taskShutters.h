@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#define SHUTTERS_TIME 10000
+#define SHUTTERS_TIME 18000
 #define R_DOWN_PIN 19
 #define R_UP_PIN 23
 

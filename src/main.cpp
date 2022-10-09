@@ -4,6 +4,8 @@
 #include "tasks/taskShutters/taskShutters.h"
 #include "tasks/taskWifiHandler/taskWiFiHandler.h"
 #include "customTypes.h"
+#include "soc/soc.h"
+#include "soc/rtc_cntl_reg.h"
 
 
 shuttersStruct dataForShutters;
@@ -14,6 +16,7 @@ void setup()
 
   Serial.begin(9600);
   Serial.println("Setting state to INIT");
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable   detector
 
   xTaskCreate(
     taskBlinker,
