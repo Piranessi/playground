@@ -39,9 +39,9 @@ const shuttersRefreshStatus = () => {
       let sDb: boolean = sdata["value"]["state"]["reported"]["shuttersDown"];
       if(sDb != null){
         if(sDb === true) {
-          sD = "Rolety są opuszczone";
+          sD = "Shutters down";
         } else {
-          sD = "Rolety są podniesione";
+          sD = "Shutters up";
         }
       }
     }
