@@ -26,7 +26,6 @@ function SpotifyAuthorization() {
         } else {
           console.error('Error setting up the request:', error.message);
         }
-        // Handle other errors if needed
       } finally {
         setLoading(false);
       }
@@ -40,6 +39,11 @@ function SpotifyAuthorization() {
     };
   }, []); // Removed 'login' from the dependency array
 
+  const handleLogin = () => {
+    // Redirect the user to the Spotify login page
+    window.location.href = 'http://spotifyorganizer.matgosoft.com/login';
+  };
+
   return (
     <div className="Login">
       {loading ? (
@@ -49,7 +53,7 @@ function SpotifyAuthorization() {
       ) : (
         <>
           <p>User is not logged in!</p>
-          {/* Your login UI elements */}
+          <button onClick={handleLogin}>Login with Spotify</button>
         </>
       )}
     </div>
