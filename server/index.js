@@ -2,6 +2,27 @@ import express from 'express';
 import session from 'express-session';
 import SpotifyWebApi from 'spotify-web-api-node';
 import cors from 'cors';
+import expressWs from 'express-ws';
+
+// Enable WebSocket support
+const { getWss, applyTo } = expressWs(app);
+
+
+// WebSocket connection handling
+app.ws('/ws', (ws) => {
+  console.log('WebSocket connection established');
+
+  // Handle WebSocket communication
+
+  // Example: Broadcast a message to all clients
+  ws.on('message', (message) => {
+    getWss().clients.forEach((client) => {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(message);
+      }
+    });
+  });
+});
 
 
 const app = express();
