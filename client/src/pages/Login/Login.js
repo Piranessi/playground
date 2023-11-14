@@ -4,23 +4,18 @@ import queryString from 'query-string';
 
 function SpotifyAuthorization (){
   useEffect(() => {
-    const params = queryString.parse(window.location.search);
-    const { code } = params;
-    console.log("test, ", code);
-    if (!code) {
-      // Use Axios to exchange the authorization code for an access token
-      axios.post('https://spotifyorganizer.matgosoft.com/login', { code })
-        .then(response => {
-          const { access_token } = response.data;
-          console.log("we have access");
-          // Store the access token in local storage or context for future use
-          // For example, you can use Redux or React Context API for state management
-          // localStorage.setItem('access_token', access_token);
-        })
-        .catch(error => {
-          console.error('Error exchanging code for access token:', error);
-        });
-    }
+    const redirectToSpotifyLogin = async () => {
+      try {
+        const response = await axios.get('http://spotifyorganizer.matgosoft.com/login'); 
+        const authorizeURL = response.data.authorizeURL;
+        window.location.href = authorizeURL;
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle error if needed
+      }
+    };
+
+    redirectToSpotifyLogin();
   }, []);
 
   return (
