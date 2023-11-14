@@ -14,16 +14,13 @@ const corsOptions = {
   origin: 'http://so.matgosoft.com',
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
-
 app.use(cors(corsOptions));
-// app.use(cors);
+
 /*
 main page - opis co robi, przejdź do logowania na Spotify
 board? - lista playlist po lewej, jak  na spotify, wyroznienie zaznaczonej, trochę jaśniejsze tło jak na spotify
 mniej wiecej na srodku, na gorze, opcje przenoszenia piosenek 1. dodaj piosenkę, 2. przenieś, 3. usuń(zaznaczona piosenka, gdzieś z boku opcja kosz + po kliknięciu delete)
 musi być też opcja undo
-
-
 
 getPlaylists
 getSongsForPlaylist
@@ -32,19 +29,22 @@ getSongsForPlaylist
 
 app.get('/', (req, res) => {
   res.json({msg:"hw"});
-  // res.end("HW");
 });
 
-app.get('/a', (req, res) => {
-  res.json({msg:"a"});
-  // res.end("HW");
-});
+// app.get('/login', (req, res) => {
+//     const scopes = ['user-library-read', 'user-library-modify']; // Specify the required scope for reading user's library
+//     const authorizeURL = spotifyApi.createAuthorizeURL(scopes);
+//     res.redirect(authorizeURL);
+//   });
+
 
 app.get('/login', (req, res) => {
-    const scopes = ['user-library-read', 'user-library-modify']; // Specify the required scope for reading user's library
-    const authorizeURL = spotifyApi.createAuthorizeURL(scopes);
-    res.redirect(authorizeURL);
-  });
+  const scopes = ['user-library-read', 'user-library-modify'];
+  const authorizeURL = spotifyApi.createAuthorizeURL(scopes);
+  res.json({ authorizeURL }); // Return the authorization URL to the React component
+});
+
+
   
 app.get('/callback', async (req, res) => {
   const { code } = req.query;
