@@ -32,9 +32,16 @@ app.get('/', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  const scopes = ['user-library-read', 'user-library-modify'];
-  const authorizeURL = spotifyApi.createAuthorizeURL(scopes);
-  res.json({ authorizeURL }); // Return the authorization URL to the React component
+  // Check if the user is already authenticated with Spotify
+  if (req.session.spotifyAccessToken) {
+    // User is already logged in, redirect or handle accordingly
+    res.json({ message: 'User is already logged in.' });
+  } else {
+    // User is not logged in, initiate Spotify login
+    const scopes = ['user-library-read', 'user-library-modify'];
+    const authorizeURL = spotifyApi.createAuthorizeURL(scopes);
+    res.json({ authorizeURL }); // Return the authorization URL to the React component
+  }
 });
   
 app.get('/callback', async (req, res) => {
@@ -42,12 +49,22 @@ app.get('/callback', async (req, res) => {
   try {
     const data = await spotifyApi.authorizationCodeGrant(code);
     const accessToken = data.body['access_token'];
+    // Store the access token in the session
+    req.session.spotifyAccessToken = accessToken;
+    // Set the access token in the Spotify API instance
     spotifyApi.setAccessToken(accessToken);
     res.redirect('http://so.matgosoft.com/login');
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('Error occurred while authenticating with Spotify.');
   }
+});
+
+// Add a new endpoint to check if the user is logged in
+app.get('/check-login', (req, res) => {
+  // Check if the user is authenticated by looking at the session data
+  const isLoggedIn = !!req.session.spotifyAccessToken;
+  res.json({ isLoggedIn });
 });
 
 app.get('/my-music', async (eq, res) => {
