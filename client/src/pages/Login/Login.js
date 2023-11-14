@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../../components/AuthContext';
 
 function SpotifyAuthorization() {
   const { isLoggedIn, login } = useAuth();
