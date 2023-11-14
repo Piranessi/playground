@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import queryString from 'query-string';
 
-const SpotifyAuthorization = () => {
+function SpotifyAuthorization (){
   useEffect(() => {
     const params = queryString.parse(window.location.search);
     const { code } = params;
