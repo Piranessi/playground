@@ -62,10 +62,18 @@ app.get('/callback', async (req, res) => {
 
 // Add a new endpoint to check if the user is logged in
 app.get('/check-login', (req, res) => {
-  // Check if the user is authenticated by looking at the session data
-  const isLoggedIn = !!req.session.spotifyAccessToken;
-  res.json({ isLoggedIn });
+  try {
+    // Check if the user is authenticated by looking at the session data
+    const isLoggedIn = !!req.session.spotifyAccessToken;
+    
+    // Respond with the login status
+    res.json({ isLoggedIn });
+  } catch (error) {
+    console.error('Error in /check-login:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
 
 app.get('/my-music', async (eq, res) => {
   try {
