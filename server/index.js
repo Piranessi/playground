@@ -7,24 +7,6 @@ import expressWs from 'express-ws';
 // Enable WebSocket support
 const { getWss, applyTo } = expressWs(app);
 
-
-// WebSocket connection handling
-app.ws('/ws', (ws) => {
-  console.log('WebSocket connection established');
-
-  // Handle WebSocket communication
-
-  // Example: Broadcast a message to all clients
-  ws.on('message', (message) => {
-    getWss().clients.forEach((client) => {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
-  });
-});
-
-
 const app = express();
 const spotifyApi = new SpotifyWebApi({
   clientId: '80c84ec62fe94174ab66c2105ce29b22',
@@ -56,6 +38,25 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+
+// WebSocket connection handling
+app.ws('/ws', (ws) => {
+  console.log('WebSocket connection established');
+
+  // Handle WebSocket communication
+
+  // Example: Broadcast a message to all clients
+  ws.on('message', (message) => {
+    getWss().clients.forEach((client) => {
+      if (client !== ws && client.readyState === WebSocket.OPEN) {
+        client.send(message);
+      }
+    });
+  });
+});
+
+
 
 /*
 main page - opis co robi, przejdź do logowania na Spotify
