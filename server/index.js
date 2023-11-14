@@ -4,9 +4,6 @@ import SpotifyWebApi from 'spotify-web-api-node';
 import cors from 'cors';
 import expressWs from 'express-ws';
 
-// Enable WebSocket support
-const { getWss, applyTo } = expressWs(app);
-
 const app = express();
 const spotifyApi = new SpotifyWebApi({
   clientId: '80c84ec62fe94174ab66c2105ce29b22',
@@ -39,7 +36,8 @@ app.use(
   })
 );
 
-
+// Enable WebSocket support
+const { getWss, applyTo } = expressWs(app);
 // WebSocket connection handling
 app.ws('/ws', (ws) => {
   console.log('WebSocket connection established');
