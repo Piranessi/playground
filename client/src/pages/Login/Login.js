@@ -9,6 +9,7 @@ function SpotifyAuthorization (){
         const response = await axios.get('http://spotifyorganizer.matgosoft.com/login'); 
         const authorizeURL = response.data.authorizeURL;
         window.location.href = authorizeURL;
+        console.log("authorizeURL: ", authorizeURL); //DEBUG
       } catch (error) {
         console.error('Error:', error);
         // Handle error if needed
