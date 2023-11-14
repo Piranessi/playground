@@ -31,20 +31,11 @@ app.get('/', (req, res) => {
   res.json({msg:"hw1"});
 });
 
-// app.get('/login', (req, res) => {
-//     const scopes = ['user-library-read', 'user-library-modify']; // Specify the required scope for reading user's library
-//     const authorizeURL = spotifyApi.createAuthorizeURL(scopes);
-//     res.redirect(authorizeURL);
-//   });
-
-
 app.get('/login', (req, res) => {
   const scopes = ['user-library-read', 'user-library-modify'];
   const authorizeURL = spotifyApi.createAuthorizeURL(scopes);
   res.json({ authorizeURL }); // Return the authorization URL to the React component
 });
-
-
   
 app.get('/callback', async (req, res) => {
   const { code } = req.query;
@@ -52,7 +43,7 @@ app.get('/callback', async (req, res) => {
     const data = await spotifyApi.authorizationCodeGrant(code);
     const accessToken = data.body['access_token'];
     spotifyApi.setAccessToken(accessToken);
-    res.send('Successfully authenticated! You can now access user\'s Spotify data.');
+    res.redirect('http://so.matgosoft.com/login');
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('Error occurred while authenticating with Spotify.');

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
-import queryString from 'query-string';
 
 function SpotifyAuthorization (){
   useEffect(() => {
