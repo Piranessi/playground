@@ -12,9 +12,20 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 const corsOptions = {
-  origin: 'http://so.matgosoft.com',
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  origin: (origin, callback) => {
+    // Check if the origin is allowed, or use a dynamic check based on your requirements
+    const allowedOrigins = ['http://so.matgosoft.com', 'http://so.matgosoft.com/login'];
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
 
 app.use(
