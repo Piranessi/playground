@@ -1,4 +1,5 @@
 import express from 'express';
+import session from 'express-session';
 import SpotifyWebApi from 'spotify-web-api-node';
 import cors from 'cors';
 
@@ -15,6 +16,14 @@ const corsOptions = {
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
+
+app.use(
+  session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 /*
 main page - opis co robi, przejdź do logowania na Spotify
