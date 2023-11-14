@@ -28,7 +28,7 @@ getSongsForPlaylist
 */
 
 app.get('/', (req, res) => {
-  res.json({msg:"hw"});
+  res.json({msg:"hw1"});
 });
 
 // app.get('/login', (req, res) => {
