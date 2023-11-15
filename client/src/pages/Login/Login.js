@@ -40,8 +40,10 @@ function SpotifyAuthorization() {
 
   const handleLogin = () => {
     // Redirect the user to the Spotify login page
-    window.location.href = 'http://spotifyorganizer.matgosoft.com/login';
+    window.location.href = authorizeURL;
   };
+  
+
 
   useEffect(() => {
     // Check for a callback from Spotify
@@ -72,6 +74,8 @@ function SpotifyAuthorization() {
       // Handle errors if needed
     }
   };
+  
+
 
   return (
     <div className="Login">
