@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../components/AuthContext';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function SpotifyAuthorization() {
   const { isLoggedIn, login } = useAuth();
   const [loading, setLoading] = useState(true);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const source = axios.CancelToken.source();
@@ -63,7 +63,7 @@ function SpotifyAuthorization() {
         // Update the context
         login();
         // Navigate the user back to the original login route
-        history.push('/login');
+        navigate('/login');
       } else {
         // Handle authentication failure
       }
