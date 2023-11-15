@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../components/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 function SpotifyAuthorization() {
   const { isLoggedIn, login } = useAuth();
   const [loading, setLoading] = useState(true);
+  const [authorizeURL, setAuthorizeURL] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,8 +43,21 @@ function SpotifyAuthorization() {
     // Redirect the user to the Spotify login page
     window.location.href = authorizeURL;
   };
-  
 
+  useEffect(() => {
+    // Fetch the Spotify authorization URL
+    const fetchSpotifyAuthURL = async () => {
+      try {
+        const response = await axios.get('http://spotifyorganizer.matgosoft.com/login');
+        setAuthorizeURL(response.data.authorizeURL);
+      } catch (error) {
+        console.error('Error fetching Spotify authorization URL:', error.message);
+        // Handle errors if needed
+      }
+    };
+
+    fetchSpotifyAuthURL();
+  }, []); // Empty dependency array to run only once when the component mounts
 
   useEffect(() => {
     // Check for a callback from Spotify
@@ -74,8 +88,6 @@ function SpotifyAuthorization() {
       // Handle errors if needed
     }
   };
-  
-
 
   return (
     <div className="Login">
