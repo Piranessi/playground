@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../components/AuthContext';
-import { useHistory } from 'react-router-dom';
+import { useHistory } from 'history';
 
 function SpotifyAuthorization() {
   const { isLoggedIn, login } = useAuth();
