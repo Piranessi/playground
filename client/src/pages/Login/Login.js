@@ -1,30 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../components/AuthContext';
+import { useHistory } from 'react-router-dom';
 
 function SpotifyAuthorization() {
   const { isLoggedIn, login } = useAuth();
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
 
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     const checkSpotifyLoginStatus = async () => {
       try {
-        const response = await axios.get('http://spotifyorganizer.matgosoft.com/check-login');
+        const response = await axios.get('http://spotifyorganizer.matgosoft.com/check-login', {
+          cancelToken: source.token,
+        });
         const userIsLoggedIn = response.data.isLoggedIn;
         if (userIsLoggedIn) {
           login(); // Update the context if the user is logged in
         }
       } catch (error) {
-        if (axios.isCancel(error)) {
-          console.error('Request canceled:', error.message);
-        } else if (error.response) {
-          console.error('Error response from server:', error.response.data);
-          // Handle server error if needed
-        } else if (error.request) {
-          console.error('No response received:', error.request);
-          // Handle network error if needed
-        } else {
-          console.error('Error setting up the request:', error.message);
+        if (!axios.isCancel(error)) {
+          console.error('Error checking login status:', error.message);
+          // Handle other errors if needed
         }
       } finally {
         setLoading(false);
@@ -33,15 +32,45 @@ function SpotifyAuthorization() {
 
     checkSpotifyLoginStatus();
 
-    // Clean up the effect if unmounting (optional)
+    // Clean up the effect if unmounting
     return () => {
-      // Cancel the Axios request (if using a cancel token)
+      source.cancel('Request canceled: Component unmounted');
     };
-  }, []); // Removed 'login' from the dependency array
+  }, [login]); // 'login' added to the dependency array
 
   const handleLogin = () => {
     // Redirect the user to the Spotify login page
     window.location.href = 'http://spotifyorganizer.matgosoft.com/login';
+  };
+
+  useEffect(() => {
+    // Check for a callback from Spotify
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+
+    if (code) {
+      // Handle the Spotify callback logic here
+      handleSpotifyCallback(code);
+    }
+  }, []); // Empty dependency array to run only once when the component mounts
+
+  const handleSpotifyCallback = async (code) => {
+    try {
+      // Make a request to your backend to exchange the code for an access token
+      const response = await axios.get(`http://spotifyorganizer.matgosoft.com/callback?code=${code}`);
+      // Assuming your backend sends a success response upon successful authentication
+      if (response.data.success) {
+        // Update the context
+        login();
+        // Navigate the user back to the original login route
+        history.push('/login');
+      } else {
+        // Handle authentication failure
+      }
+    } catch (error) {
+      console.error('Error handling Spotify callback:', error.message);
+      // Handle errors if needed
+    }
   };
 
   return (

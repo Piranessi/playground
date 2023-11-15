@@ -14,7 +14,7 @@ const spotifyApi = new SpotifyWebApi({
 const corsOptions = {
   origin: (origin, callback) => {
     // Check if the origin is allowed, or use a dynamic check based on your requirements
-    const allowedOrigins = ['http://so.matgosoft.com', 'http://so.matgosoft.com/login'];
+    const allowedOrigins = ['http://so.matgosoft.com', 'http://so.matgosoft.com/login', 'http://spotifyorganizer.matgosoft.com'];
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
@@ -106,10 +106,13 @@ app.get('/callback', async (req, res) => {
 app.get('/check-login', (req, res) => {
   try {
     // Check if the user is authenticated by looking at the session data
-    const isLoggedIn = !!req.session.spotifyAccessToken;
-    
-    // Respond with the login status
-    res.json({ isLoggedIn });
+  // Check if the user is authenticated by looking at the session data
+  const isLoggedIn = !!req.session.spotifyAccessToken;
+  console.log('isLoggedIn:', isLoggedIn);
+
+  // Respond with the login status
+  res.json({ isLoggedIn });
+
   } catch (error) {
     console.error('Error in /check-login:', error);
     res.status(500).json({ error: 'Internal Server Error' });
