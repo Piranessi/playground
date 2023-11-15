@@ -79,10 +79,12 @@ app.get('/login', (req, res) => {
   } else {
     // User is not logged in, initiate Spotify login
     const scopes = ['user-library-read', 'user-library-modify'];
-    const authorizeURL = spotifyApi.createAuthorizeURL(scopes);
+    const redirectUri = 'http://so.matgosoft.com/'; // Update the redirect URI
+    const authorizeURL = spotifyApi.createAuthorizeURL(scopes, null, redirectUri);
     res.json({ authorizeURL }); // Return the authorization URL to the React component
   }
 });
+
   
 app.get('/callback', async (req, res) => {
   const { code } = req.query;
