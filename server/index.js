@@ -97,7 +97,7 @@ app.get('/callback', async (req, res) => {
     console.log("/callback ", req.session.spotifyAccessToken);
 
     // Redirect the user to so.spotifyorganizer.com/login with the access token as a query parameter
-    res.redirect(`http://so.spotifyorganizer.com/login?accessToken=${accessToken}`);
+    res.redirect(`http://so.matgosoft.com/login?accessToken=${accessToken}`);
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('Error occurred while authenticating with Spotify.');
