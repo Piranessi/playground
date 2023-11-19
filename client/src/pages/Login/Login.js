@@ -71,15 +71,21 @@ function SpotifyAuthorization() {
   }, []); // Empty dependency array to run only once when the component mounts
 
   const handleSpotifyCallback = async (code) => {
+    console.log("handleSpotifyCallback 0");
     try {
       // Make a request to your backend to exchange the code for an access token
       const response = await axios.get(`http://spotifyorganizer.matgosoft.com/callback?code=${code}`);
+      console.log("handleSpotifyCallback response: ", response);
       // Assuming your backend sends a success response upon successful authentication
       if (response.data.success) {
         // Update the context
+        console.log("handleSpotifyCallback before login");
         login();
+        console.log("handleSpotifyCallback after login");
         // Navigate the user back to the original login route
+        console.log("handleSpotifyCallback before navigate/login");
         navigate('/login');
+        console.log("handleSpotifyCallback after navigate/login");
       } else {
         // Handle authentication failure
       }

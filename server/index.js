@@ -93,6 +93,7 @@ app.get('/callback', async (req, res) => {
     const accessToken = data.body['access_token'];
     // Store the access token in the session
     req.session.spotifyAccessToken = accessToken;
+    console.log("/callback ", req.session.spotifyAccessToken)
     // Set the access token in the Spotify API instance
     spotifyApi.setAccessToken(accessToken);
     res.redirect('http://so.matgosoft.com/login');
