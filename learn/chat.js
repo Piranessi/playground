@@ -108,15 +108,21 @@ function SpotifyAuthorization() {
   }, []); // Empty dependency array to run only once when the component mounts
 
   const handleSpotifyCallback = async (code) => {
+    console.log("handleSpotifyCallback 0");
     try {
       // Make a request to your backend to exchange the code for an access token
       const response = await axios.get(`http://spotifyorganizer.matgosoft.com/callback?code=${code}`);
+      console.log("handleSpotifyCallback response: ", response);
       // Assuming your backend sends a success response upon successful authentication
       if (response.data.success) {
         // Update the context
+        console.log("handleSpotifyCallback before login");
         login();
+        console.log("handleSpotifyCallback after login");
         // Navigate the user back to the original login route
+        console.log("handleSpotifyCallback before navigate/login");
         navigate('/login');
+        console.log("handleSpotifyCallback after navigate/login");
       } else {
         // Handle authentication failure
       }
@@ -154,8 +160,8 @@ import expressWs from 'express-ws';
 
 const app = express();
 const spotifyApi = new SpotifyWebApi({
-  clientId: '80c84ec62fe94174ab66c2105ce29b22',
-  clientSecret: '87afc455f7354769a848417320ecae16',
+  clientId: 'myclientid',
+  clientSecret: 'myclientsecret',
   redirectUri: 'http://spotifyorganizer.matgosoft.com/callback',
 });
 
@@ -202,6 +208,7 @@ app.ws('/ws', (ws) => {
   });
 });
 
+
 app.get('/', (req, res) => {
   res.json({msg:"hw1"});
 });
@@ -226,16 +233,19 @@ app.get('/callback', async (req, res) => {
   try {
     const data = await spotifyApi.authorizationCodeGrant(code);
     const accessToken = data.body['access_token'];
+
     // Store the access token in the session
     req.session.spotifyAccessToken = accessToken;
-    // Set the access token in the Spotify API instance
-    spotifyApi.setAccessToken(accessToken);
-    res.redirect('http://so.matgosoft.com/login');
+    console.log("/callback ", req.session.spotifyAccessToken);
+
+    // Redirect the user to so.spotifyorganizer.com/login with the access token as a query parameter
+    res.redirect(`http://so.matgosoft.com/login?accessToken=${accessToken}`);
   } catch (error) {
     console.error('Error:', error);
     res.status(500).send('Error occurred while authenticating with Spotify.');
   }
 });
+
 
 // Add a new endpoint to check if the user is logged in
 app.get('/check-login', (req, res) => {
@@ -259,6 +269,11 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-//## react frontend is on http://so.matgosoft.com and node backend is on http://spotifyorganizer.matgosoft.com
-//## when I try to log in through http://so.matgosoft.com/login it redirects me to spotify page, asks for auth (OK), and it redirects me to
-//## http://so.matgosoft.com/login but user is not logged in. How can I fix it
+/*
+Above is my code.
+This is description:
+react frontend is on http://so.matgosoft.com and node backend is on http://spotifyorganizer.matgosoft.com
+when I try to log in through http://so.matgosoft.com/login it redirects me to spotify page, asks for auth (OK), and it redirects me to
+http://so.matgosoft.com/login but user is not logged in. How can I fix it?
+
+*/
