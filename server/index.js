@@ -6,15 +6,15 @@ import expressWs from 'express-ws';
 
 const app = express();
 const spotifyApi = new SpotifyWebApi({
-  clientId: '80c84ec62fe94174ab66c2105ce29b22',
-  clientSecret: '87afc455f7354769a848417320ecae16',
-  redirectUri: 'http://spotifyorganizer.matgosoft.com/callback',
+  clientId: '-',
+  clientSecret: '-',
+  redirectUri: '-',
 });
 
 const corsOptions = {
   origin: (origin, callback) => {
     // Check if the origin is allowed, or use a dynamic check based on your requirements
-    const allowedOrigins = ['http://so.matgosoft.com', 'http://so.matgosoft.com/login', 'http://spotifyorganizer.matgosoft.com'];
+    const allowedOrigins = ['-'];
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
@@ -54,18 +54,6 @@ app.ws('/ws', (ws) => {
   });
 });
 
-
-
-/*
-main page - opis co robi, przejdź do logowania na Spotify
-board? - lista playlist po lewej, jak  na spotify, wyroznienie zaznaczonej, trochę jaśniejsze tło jak na spotify
-mniej wiecej na srodku, na gorze, opcje przenoszenia piosenek 1. dodaj piosenkę, 2. przenieś, 3. usuń(zaznaczona piosenka, gdzieś z boku opcja kosz + po kliknięciu delete)
-musi być też opcja undo
-
-getPlaylists
-getSongsForPlaylist
-
-*/
 
 app.get('/', (req, res) => {
   res.json({msg:"hw1"});
