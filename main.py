@@ -64,60 +64,6 @@ class mqttHandler():
             # http_proxy_options=proxy_options)
         return res
 
-
-# class ScreenWidget(Widget):
-#     mqttObj = mqttHandler("phone", "a1tg3e4a8pndpe-ats.iot.eu-west-1.amazonaws.com", 443, "private.pem.key", "ca1.pem", "certificate.pem.crt")
-#     mqtt_connection = mqttObj.create_mqtt_connection()
-#
-#     print("Connecting to {} with client ID '{}'...".format(mqttObj.endpoint, mqttObj.client_id))
-#     connect_future = mqtt_connection.connect()
-#     connect_future.result()  # Future.result() waits until a result is available
-#     print("Connected!")
-#
-#     message_topic = "esp32-1/sub"
-#     message_string = "test msg"
-#
-#     # Subscribe
-#     print("Subscribing to topic '{}'...".format(message_topic))
-#     subscribe_future, packet_id = mqtt_connection.subscribe(
-#         topic=message_topic,
-#         qos=mqtt.QoS.AT_MOST_ONCE,
-#         callback=mqttObj.on_message_received)
-#
-#     subscribe_result = subscribe_future.result()
-#     print("Subscribed with {}".format(str(subscribe_result['qos'])))
-#
-#     if message_string:  # Pub msg to server desired number of times. Skipped if msg=blank. Loops forever if count = 0.
-#         if count == 0:
-#             print ("Sending messages until program killed")
-#         else:
-#             print ("Sending {} message(s)".format(count))
-#         publish_count = 1
-#         while (publish_count <= count) or (count == 0):
-#             message = "{} [{}]".format(message_string, publish_count)
-#             print("Publishing message to topic '{}': {}".format(message_topic, message))
-#             message_json = json.dumps(message)
-#             mqtt_connection.publish(
-#                 topic="esp32-1/pub",
-#                 payload=message_json,
-#                 qos=mqtt.QoS.AT_MOST_ONCE)
-#             time.sleep(1)
-#             publish_count += 1
-#
-#     if count != 0 and not received_all_event.is_set():  # w8 all msgs to be received. Waits forever if count=0.
-#         print("Waiting for all messages to be received...")
-#
-#     received_all_event.wait()
-#     print("{} message(s) received.".format(received_count))
-#
-#     # Disconnect
-#     print("Disconnecting...")
-#     disconnect_future = mqtt_connection.disconnect()
-#     disconnect_future.result()
-#     print("Disconnected!")
-#     pass
-
-
 class MyGrid(GridLayout):
     def __init__(self, **kwargs):
         super(MyGrid, self).__init__(**kwargs)
