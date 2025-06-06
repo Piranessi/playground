@@ -19,7 +19,7 @@ let counter = 0;
 Amplify.configure(awsexport);
 PubSub.addPluggable(new AWSIoTProvider({
   aws_pubsub_region: 'eu-west-1',
-  aws_pubsub_endpoint: 'wss://a1tg3e4a8pndpe-ats.iot.eu-west-1.amazonaws.com/mqtt',
+  aws_pubsub_endpoint: '-',
 }));
 PubSub.subscribe(subscribeTopic).subscribe({
   next: data => {
