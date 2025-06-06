@@ -88,22 +88,3 @@ void loop()
       break;
   }
 }
-
-// shutters functionality
-// controlling from phone func
-// reset functionality
-// set day or night in setup, the same for shuttes
-
-  // in setup -> commented
-  // Serial.println(ESP.getFreeHeap());
-  // Serial.println(ESP.getSketchSize());
-  // Serial.println(ESP.getFreeSketchSpace());
-  // Serial.println(ESP.getChipCores());
-  // Serial.println(ESP.getFlashChipSize());
-  // Serial.println("");
-  /*
-        PubSub.publish(publishTopic, { msg: "lfe_1"});
-    } else {
-      PubSub.publish(publishTopic, { msg: "lfe_0"});
-      */
-// test
