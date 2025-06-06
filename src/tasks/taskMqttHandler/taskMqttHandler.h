@@ -3,7 +3,7 @@
 
 #define THINGNAME "esp32-1"
 // old sub topic esp32-1/sub
-static const char AWS_IOT_ENDPOINT[] = "a1tg3e4a8pndpe-ats.iot.eu-west-1.amazonaws.com";
+static const char AWS_IOT_ENDPOINT[] = "-";
 static const char AWS_CERT_CA[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
 -
