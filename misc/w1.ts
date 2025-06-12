@@ -752,3 +752,23 @@ function maxAdjacentDistance(nums: number[]): number {
     }
     return maxAbsoluteDiff;
 }
+
+// move from another file
+// export function textAnalyzer(text: string): number{
+//     const words = text.split(' ');
+//     const uniqueWords = new Set(words);
+//     return uniqueWords.size;
+// }
+
+// export function log(message: string, level: 'info' | 'warn' | 'error' = 'info'): void {
+//     // if (process.env.NODE_ENV === 'development') {
+//         if (level === 'info') {
+//             console.log(message);
+//         } else if (level === 'warn') {
+//             console.warn(message);
+//         } else if (level === 'error') {
+//             console.error(message);
+//         }
+//     //
+// }
+//
