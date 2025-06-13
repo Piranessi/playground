@@ -2,6 +2,7 @@
 
 set -e
 USERNAME="Piranessi"
+SCRIPT_NAME="$(basename "$0")"
 
 REPOS=(
   learn
@@ -25,14 +26,12 @@ REPOS=(
   TicTacToe
 )
 
-# Sprawdź, czy repozytorium ma pierwszy commit
 if ! git rev-parse HEAD >/dev/null 2>&1; then
-  echo "❌ Repozytorium nie ma jeszcze commita. Dodaj pierwszy commit, np.:"
+  echo "❌ Repozytorium nie ma jeszcze commita. Dodaj pierwszy commit:"
   echo "   touch .gitkeep && git add .gitkeep && git commit -m 'Initial commit'"
   exit 1
 fi
 
-# Sprawdź, czy robocze repozytorium jest czyste
 if ! git diff --quiet || ! git diff --cached --quiet; then
   echo "❌ Masz niezapisane zmiany. Zacommituj lub wyczyść repo:"
   echo "   git add . && git commit -m 'Save before import'"
@@ -42,6 +41,14 @@ fi
 
 for repo in "${REPOS[@]}"; do
   echo "=== Importing $repo ==="
+
+  # Usuń katalog jeśli istnieje, ale nie usuwaj skryptu
+  if [ -d "$repo" ]; then
+    echo "🧹 Usuwam katalog $repo"
+    rm -rf "$repo"
+    git add -A
+    git commit -m "Remove existing $repo before re-import"
+  fi
 
   git remote remove "$repo" 2>/dev/null || true
   git remote add "$repo" "https://github.com/$USERNAME/$repo.git"
@@ -59,8 +66,7 @@ for repo in "${REPOS[@]}"; do
 
   git subtree add --prefix="$repo" "$repo" "$BRANCH"
   git remote remove "$repo"
-
   echo ""
 done
 
-echo "✅ Wszystkie repozytoria zostały zaimportowane."
+echo "✅ Wszystkie repozytoria zaimportowane z nadpisaniem istniejących katalogów."
