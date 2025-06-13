@@ -1,297 +1,377 @@
-// `import { log } from "console";` - ta linia nie jest zazwyczaj potrzebna w TypeScript/Node.js,
-// ponieważ `console.log` jest globalnie dostępny. Można ją bezpiecznie usunąć.
+// Removed: `import { log } from "console";` - `console.log` is globally available.
 
-// --- Sekcja 1: Podstawowe typy i zmienne ---
+// --- Section 1: Basic Types and Variables ---
 
 /**
- * @section Podstawowe typy i zmienne
- * Przykłady deklaracji i użycia podstawowych typów danych w TypeScript:
+ * @section Basic Types and Variables
+ * Demonstrates the declaration and usage of fundamental TypeScript data types:
  * string, boolean, number, any.
- * Pokazuje również proste operacje na zmiennych i ich mutację.
+ * Also showcases simple variable operations and mutations.
  */
 
-// 0. Typowanie string
+/**
+ * 0. String Typing
+ * Declares string variables and concatenates them.
+ */
 const FirstName: string = "Adam";
 const LastName: string = "Mickiewicz";
-const FullName: string = FirstName + " " + LastName;
-console.log(`Pełne imię: ${FullName}`); // Użycie template string dla czytelności
-
-// 1. Typowanie boolean (próba przypisania niezgodnego typu przez asercję)
-let booleanVal: boolean = true;
-const booleanStrVal: string = "false"; // String "false"
-// `as unknown as boolean` - to jest asercja typu, która "mówi" TypeScriptowi,
-// aby traktował `booleanStrVal` (który jest stringiem) jako `boolean`.
-// Jest to ryzykowne i powinno być używane tylko wtedy, gdy jesteś absolutnie pewien,
-// że konwersja jest bezpieczna. W tym przypadku string "false" NIE jest booleanem false.
-booleanVal = booleanStrVal as unknown as boolean;
-console.log("booleanVal (po asercji): " + booleanVal); // Wynik to string "false", nie boolean false!
-
-// 2. Poprawne konwertowanie stringa na boolean
-let booleanVal2: boolean = true;
-const booleanStrVal2: string = "false";
-// `Boolean(value)` - funkcja globalna, która konwertuje wartość na typ boolean.
-// Pamiętaj, że w JavaScript/TypeScript:
-// - Puste stringi "", 0, null, undefined, NaN to `false`.
-// - NIEpuste stringi (np. "false", "0", " ") to `true`.
-// Zatem `Boolean("false")` zwróci `true`!
-booleanVal2 = Boolean(booleanStrVal2);
-console.log("booleanVal2 (po Boolean()): " + booleanVal2); // Wynik to true (boolean), bo "false" nie jest pustym stringiem
-
-// 3. Typowanie any (dowolny typ) i operacje na liczbach
-let anyVar: any = 54.3; // Zmienna typu 'any' może przechowywać dowolny typ
-// `Math.round()` - zaokrągla liczbę do najbliższej całkowitej.
-anyVar = Math.round(anyVar); // Mutuje zmienną `anyVar`
-console.log("anyVar (po zaokrągleniu): " + anyVar);
-
-// --- Sekcja 2: Tablice i ich metody ---
+const FullName: string = `${FirstName} ${LastName}`; // Using template literals for readability
+console.log(`Full Name: ${FullName}`);
 
 /**
- * @section Tablice i ich metody
- * Demonstracja deklaracji tablic oraz kluczowych metod tablicowych w JavaScript/TypeScript.
- * Podkreślono, czy dana metoda mutuje (zmienia) oryginalną tablicę, czy zwraca nową.
+ * 1. Boolean Typing (Attempting unsafe type assertion)
+ * This example demonstrates an unsafe type assertion (`as unknown as boolean`).
+ * It forces TypeScript to treat a string as a boolean, which can lead to unexpected runtime behavior.
+ * In JavaScript/TypeScript, a non-empty string like "false" is considered truthy.
+ */
+let booleanVal: boolean = true;
+const booleanStrVal: string = "false"; // This is the string literal "false"
+// `as unknown as boolean` - This type assertion tells TypeScript to bypass type checking.
+// It should only be used when you are absolutely certain the conversion is safe at runtime.
+// Here, the string "false" is NOT the boolean `false`.
+booleanVal = booleanStrVal as unknown as boolean;
+console.log("booleanVal (after assertion): " + booleanVal); // Output: "false" (the string, not the boolean)
+
+/**
+ * 2. Correctly Converting String to Boolean
+ * Demonstrates the correct way to convert a string to a boolean using `Boolean()`.
+ * Note: `Boolean("false")` evaluates to `true` because it's a non-empty string.
+ */
+let booleanVal2: boolean = true;
+const booleanStrVal2: string = "false";
+// `Boolean(value)` - A global function that converts a value to a boolean type.
+// In JavaScript/TypeScript:
+// - Falsy values: "", 0, null, undefined, NaN are `false`.
+// - Truthy values: Non-empty strings (e.g., "false", "0", " "), non-zero numbers are `true`.
+// Therefore, `Boolean("false")` returns `true`.
+booleanVal2 = Boolean(booleanStrVal2);
+console.log("booleanVal2 (after Boolean()): " + booleanVal2); // Output: true (the boolean)
+
+/**
+ * 3. `any` Type and Number Operations
+ * The `any` type allows a variable to hold values of any type, bypassing TypeScript's type checking.
+ * Demonstrates a simple mathematical operation on a number.
+ */
+let anyVar: any = 54.3; // 'any' allows assigning any type
+// `Math.round()` - Rounds a number to the nearest integer.
+anyVar = Math.round(anyVar); // Mutates `anyVar`
+console.log("anyVar (after rounding): " + anyVar);
+
+// --- Section 2: Arrays and Their Methods ---
+
+/**
+ * @section Arrays and Their Methods
+ * Demonstrates array declaration and key array methods in JavaScript/TypeScript.
+ * Highlights whether a method mutates (changes) the original array or returns a new one.
  */
 
 const arrStr: string[] = ["abc", "cde", "fgh", "ijk", "asdd23", "asdd234", "asdd623"];
 const arrStr2: string[] = ["1abc", "1cde", "1fgh,", "1ijk", "1asdd23", "11133", "111"];
 
-console.log("\n--- Metody Tablicowe (Część 1) ---");
+console.log("\n--- Array Methods (Part 1) ---");
 
-// .map() - NIE MUTUJE oryginalnej tablicy.
-// Tworzy i zwraca NOWĄ tablicę, w której każdy element jest wynikiem
-// zastosowania funkcji przekazanej jako argument do elementu oryginalnej tablicy.
+/**
+ * `.map()` - Does NOT mutate the original array.
+ * Creates and returns a NEW array where each element is the result of
+ * applying a provided function to each element of the original array.
+ */
 console.log("\n--- .map() ---");
-console.log("arrStr (map do uppercase): " + arrStr.map(i => i.toUpperCase()));
-console.log("arrStr po map(): " + arrStr); // arrStr pozostaje niezmienione
+console.log("arrStr (map to uppercase): " + arrStr.map(item => item.toUpperCase()));
+console.log("arrStr after map(): " + arrStr); // arrStr remains unchanged
 
-// .filter() - NIE MUTUJE oryginalnej tablicy.
-// Tworzy i zwraca NOWĄ tablicę zawierającą tylko te elementy,
-// które spełniają warunek określony w funkcji callback.
+/**
+ * `.filter()` - Does NOT mutate the original array.
+ * Creates and returns a NEW array containing only elements for which
+ * the provided callback function returns `true`.
+ */
 console.log("\n--- .filter() ---");
-console.log("arrStr (słowa z > 3 znakami): " + arrStr.filter(i => i.length > 3));
-console.log("arrStr po filter(): " + arrStr); // arrStr pozostaje niezmienione
+console.log("arrStr (words with > 3 chars): " + arrStr.filter(item => item.length > 3));
+console.log("arrStr after filter(): " + arrStr); // arrStr remains unchanged
 
-// Modyfikacja elementu tablicy przez indeks - MUTUJE tablicę.
-// Bezpośrednie przypisanie wartości do indeksu zmienia element w oryginalnej tablicy.
-// Ważne: `const` dla tablicy oznacza, że nie można ponownie przypisać całej tablicy,
-// ale można modyfikować jej zawartość (elementy).
-console.log("\n--- Modyfikacja przez indeks ---");
-arrStr[7] = "added"; // Dodaje element na indeksie 7
-console.log("arrStr po arrStr[7] = \"added\": " + arrStr); // arrStr jest teraz dłuższe i zawiera "added"
+/**
+ * Array element modification by index - MUTATES the array.
+ * Direct assignment to an index changes the element in the original array.
+ * Important: `const` for an array means the array reference cannot be reassigned,
+ * but its contents (elements) can still be modified.
+ */
+console.log("\n--- Modification by Index ---");
+arrStr[7] = "added"; // Adds an element at index 7 (if it doesn't exist, expands array)
+console.log("arrStr after arrStr[7] = \"added\": " + arrStr); // arrStr is now longer and includes "added"
 
-// .at() - NIE MUTUJE tablicy.
-// Zwraca element z tablicy pod określonym indeksem. Obsługuje indeksy ujemne (liczone od końca).
+/**
+ * `.at()` - Does NOT mutate the array.
+ * Returns the element at a specified index. Supports negative indices (counting from the end).
+ */
 console.log("\n--- .at() ---");
 console.log("arrStr.at(0): " + arrStr.at(0));
-console.log("arrStr.at(-1): " + arrStr.at(-1)); // Zwraca ostatni element
+console.log("arrStr.at(-1): " + arrStr.at(-1)); // Returns the last element
 
-// .concat() - NIE MUTUJE oryginalnych tablic.
-// Tworzy i zwraca NOWĄ tablicę, która jest połączeniem dwóch lub więcej tablic.
+/**
+ * `.concat()` - Does NOT mutate the original arrays.
+ * Creates and returns a NEW array that is a concatenation of two or more arrays.
+ */
 console.log("\n--- .concat() ---");
 console.log("arrStr.concat(arrStr2): " + arrStr.concat(arrStr2));
-console.log("arrStr po concat(): " + arrStr); // arrStr i arrStr2 pozostają niezmienione
+console.log("arrStr after concat(): " + arrStr); // arrStr and arrStr2 remain unchanged
 
-// .copyWithin() - MUTUJE tablicę.
-// Kopiuje sekwencję elementów tablicy do innej pozycji w tej samej tablicy.
-// Nie zmienia długości tablicy.
+/**
+ * `.copyWithin()` - MUTATES the array.
+ * Copies a sequence of array elements to another position within the same array.
+ * Does not change the length of the array.
+ */
 console.log("\n--- .copyWithin() ---");
 const arrCopyWithinTest = ['a', 'b', 'c', 'd', 'e', 'f'];
 console.log("Original arrCopyWithinTest: " + arrCopyWithinTest);
-arrCopyWithinTest.copyWithin(0, 3, 6); // Kopiuje elementy od indeksu 3 do 5 (d, e, f)
-                                      // i wkleja je od indeksu 0.
-console.log("arrCopyWithinTest.copyWithin(0, 3, 6): " + arrCopyWithinTest); // arrCopyWithinTest zostało zmienione
+arrCopyWithinTest.copyWithin(0, 3, 6); // Copies elements from index 3 up to (but not including) 6 (d, e, f)
+                                     // and pastes them starting from index 0.
+console.log("arrCopyWithinTest.copyWithin(0, 3, 6): " + arrCopyWithinTest); // arrCopyWithinTest has been modified
 
-// .entries() - NIE MUTUJE tablicy.
-// Zwraca nowy obiekt iteratora tablicy, który zawiera pary [indeks, wartość] dla każdego indeksu w tablicy.
-// Często używany w pętlach `for...of`.
+/**
+ * `.entries()` - Does NOT mutate the array.
+ * Returns a new Array Iterator object that contains key/value pairs for each index in the array.
+ * Often used in `for...of` loops.
+ */
 console.log("\n--- .entries() ---");
 for (const [index, value] of arrStr.entries()) {
     console.log(`${index}: ${value}`);
 }
 
-// 5. Metody sprawdzające zawartość tablicy
-// .every() - NIE MUTUJE tablicy.
-// Zwraca `true`, jeśli funkcja callback zwróci `true` dla WSZYSTKICH elementów tablicy.
+/**
+ * 5. Array Content Checking Methods
+ */
+
+/**
+ * `.every()` - Does NOT mutate the array.
+ * Returns `true` if the provided callback function returns `true` for ALL elements in the array.
+ */
 console.log("\n--- .every() ---");
-console.log("arrStr.every(i => i.length > 3): " + arrStr.every(i => i.length > 3));
+console.log("arrStr.every(item => item.length > 3): " + arrStr.every(item => item.length > 3));
 
-// .some() - NIE MUTUJE tablicy.
-// Zwraca `true`, jeśli funkcja callback zwróci `true` dla CO NAJMNIEJ JEDNEGO elementu tablicy.
+/**
+ * `.some()` - Does NOT mutate the array.
+ * Returns `true` if the provided callback function returns `true` for AT LEAST ONE element in the array.
+ */
 console.log("\n--- .some() ---");
-console.log("arrStr.some(i => i.length > 3): " + arrStr.some(i => i.length > 3));
+console.log("arrStr.some(item => item.length > 3): " + arrStr.some(item => item.length > 3));
 
-// .find() - NIE MUTUJE tablicy.
-// Zwraca PIERWSZY element w tablicy, który spełnia warunek określony w funkcji callback.
-// Zwraca `undefined`, jeśli żaden element nie spełnia warunku.
+/**
+ * `.find()` - Does NOT mutate the array.
+ * Returns the FIRST element in the array that satisfies the provided testing function.
+ * Returns `undefined` if no elements satisfy the condition.
+ */
 console.log("\n--- .find() ---");
-console.log("arrStr.find(i => i.length > 3): " + arrStr.find(i => i.length > 3));
+console.log("arrStr.find(item => item.length > 3): " + arrStr.find(item => item.length > 3));
 
-// .findIndex() - NIE MUTUJE tablicy.
-// Zwraca INDEKS pierwszego elementu w tablicy, który spełnia warunek.
-// Zwraca `-1`, jeśli żaden element nie spełnia warunku.
+/**
+ * `.findIndex()` - Does NOT mutate the array.
+ * Returns the INDEX of the first element in the array that satisfies the provided testing function.
+ * Returns `-1` if no elements satisfy the condition.
+ */
 console.log("\n--- .findIndex() ---");
-console.log("arrStr.findIndex(i => i.length > 3): " + arrStr.findIndex(i => i.length > 3));
+console.log("arrStr.findIndex(item => item.length > 3): " + arrStr.findIndex(item => item.length > 3));
 
-// .sort() - MUTUJE tablicę.
-// Sortuje elementy tablicy na miejscu i zwraca posortowaną tablicę.
-// Domyślnie sortuje jako stringi. Dla liczb potrzebna jest funkcja porównująca.
+/**
+ * `.sort()` - MUTATES the array.
+ * Sorts the elements of an array in place and returns the sorted array.
+ * By default, it sorts as strings. For numbers, a compare function is needed.
+ */
 console.log("\n--- .sort() ---");
 const numbersToSort = [10, 2, 100, 20, 5];
 console.log("Original numbersToSort: " + numbersToSort);
-numbersToSort.sort((a, b) => a - b); // Sortowanie numeryczne rosnąco (a-b dla rosnąco, b-a dla malejąco)
-console.log("numbersToSort.sort() (numerycznie): " + numbersToSort); // numbersToSort zostało zmienione
+// Numeric ascending sort (a-b for ascending, b-a for descending)
+numbersToSort.sort((a, b) => a - b);
+console.log("numbersToSort.sort() (numerically): " + numbersToSort); // numbersToSort has been modified
 
-// --- Pozostałe Ważne Metody Tablicowe ---
+// --- Other Important Array Methods ---
 
-// .forEach() - NIE MUTUJE tablicy.
-// Wykonuje podaną funkcję callback raz dla każdego elementu tablicy.
-// Nie zwraca żadnej wartości (zwraca `undefined`).
+/**
+ * `.forEach()` - Does NOT mutate the array.
+ * Executes a provided callback function once for each array element.
+ * Does not return any value (returns `undefined`).
+ */
 console.log("\n--- .forEach() ---");
-console.log("Iteracja z .forEach():");
+console.log("Iteration with .forEach():");
 arrStr.forEach((item, index) => {
     console.log(`Element ${index}: ${item}`);
 });
-console.log("arrStr po forEach(): " + arrStr); // arrStr pozostaje niezmienione
+console.log("arrStr after forEach(): " + arrStr); // arrStr remains unchanged
 
-// .reduce() - NIE MUTUJE tablicy.
-// Wykonuje funkcję "reducer" na każdym elemencie tablicy (od lewej do prawej),
-// zwracając pojedynczą wartość wynikową.
+/**
+ * `.reduce()` - Does NOT mutate the array.
+ * Executes a "reducer" callback function on each element of the array (from left to right),
+ * resulting in a single output value.
+ */
 console.log("\n--- .reduce() ---");
 const sumOfLengths = arrStr.reduce((accumulator, currentValue) => accumulator + currentValue.length, 0);
-console.log("Suma długości stringów w arrStr (reduce): " + sumOfLengths);
+console.log("Sum of string lengths in arrStr (reduce): " + sumOfLengths);
 const combinedString = arrStr.reduce((acc, val) => acc + " " + val);
-console.log("Połączone stringi z arrStr (reduce): " + combinedString);
-console.log("arrStr po reduce(): " + arrStr); // arrStr pozostaje niezmienione
+console.log("Combined strings from arrStr (reduce): " + combinedString);
+console.log("arrStr after reduce(): " + arrStr); // arrStr remains unchanged
 
-// .push() - MUTUJE tablicę.
-// Dodaje jeden lub więcej elementów na koniec tablicy i zwraca nową długość tablicy.
+/**
+ * `.push()` - MUTATES the array.
+ * Adds one or more elements to the end of an array and returns the new length of the array.
+ */
 console.log("\n--- .push() ---");
 const pushArray = ['apple', 'banana'];
 console.log("Original pushArray: " + pushArray);
 const newLength = pushArray.push('orange', 'grape');
-console.log("pushArray po push(): " + pushArray); // pushArray zostało zmienione
-console.log("Nowa długość: " + newLength);
+console.log("pushArray after push(): " + pushArray); // pushArray has been modified
+console.log("New length: " + newLength);
 
-// .pop() - MUTUJE tablicę.
-// Usuwa OSTATNI element z tablicy i zwraca ten usunięty element.
+/**
+ * `.pop()` - MUTATES the array.
+ * Removes the LAST element from an array and returns that removed element.
+ */
 console.log("\n--- .pop() ---");
 const popArray = ['one', 'two', 'three'];
 console.log("Original popArray: " + popArray);
 const removedElement = popArray.pop();
-console.log("popArray po pop(): " + popArray); // popArray zostało zmienione
-console.log("Usunięty element: " + removedElement);
+console.log("popArray after pop(): " + popArray); // popArray has been modified
+console.log("Removed element: " + removedElement);
 
-// .shift() - MUTUJE tablicę.
-// Usuwa PIERWSZY element z tablicy i zwraca ten usunięty element.
+/**
+ * `.shift()` - MUTATES the array.
+ * Removes the FIRST element from an array and returns that removed element.
+ */
 console.log("\n--- .shift() ---");
 const shiftArray = ['first', 'second', 'third'];
 console.log("Original shiftArray: " + shiftArray);
 const shiftedElement = shiftArray.shift();
-console.log("shiftArray po shift(): " + shiftArray); // shiftArray zostało zmienione
-console.log("Usunięty element: " + shiftedElement);
+console.log("shiftArray after shift(): " + shiftArray); // shiftArray has been modified
+console.log("Removed element: " + shiftedElement);
 
-// .unshift() - MUTUJE tablicę.
-// Dodaje jeden lub więcej elementów na POCZĄTEK tablicy i zwraca nową długość tablicy.
+/**
+ * `.unshift()` - MUTATES the array.
+ * Adds one or more elements to the BEGINNING of an array and returns the new length of the array.
+ */
 console.log("\n--- .unshift() ---");
 const unshiftArray = ['middle', 'last'];
 console.log("Original unshiftArray: " + unshiftArray);
 const newUnshiftLength = unshiftArray.unshift('new_first', 'new_second');
-console.log("unshiftArray po unshift(): " + unshiftArray); // unshiftArray zostało zmienione
-console.log("Nowa długość: " + newUnshiftLength);
+console.log("unshiftArray after unshift(): " + unshiftArray); // unshiftArray has been modified
+console.log("New length: " + newUnshiftLength);
 
-// .splice() - MUTUJE tablicę.
-// Zmienia zawartość tablicy przez usunięcie istniejących elementów i/lub dodanie nowych.
-// Zwraca tablicę zawierającą usunięte elementy.
+/**
+ * `.splice()` - MUTATES the array.
+ * Changes the contents of an array by removing or replacing existing elements
+ * and/or adding new elements in place. Returns an array containing the deleted elements.
+ * @param start - The index at which to start changing the array.
+ * @param deleteCount - The number of elements to remove.
+ * @param items - Elements to add to the array, starting at the `start` index.
+ */
 console.log("\n--- .splice() ---");
 const spliceArray = ['a', 'b', 'c', 'd', 'e'];
 console.log("Original spliceArray: " + spliceArray);
-// splice(start: number, deleteCount?: number, ...items: T[])
-// Usunięcie 2 elementów od indeksu 1 ('b', 'c'), i dodanie 'x', 'y'
+// Remove 2 elements from index 1 ('b', 'c'), and add 'x', 'y'
 const removedSpliceElements = spliceArray.splice(1, 2, 'x', 'y');
-console.log("spliceArray po splice(1, 2, 'x', 'y'): " + spliceArray); // spliceArray zostało zmienione
-console.log("Usunięte elementy przez splice: " + removedSpliceElements);
+console.log("spliceArray after splice(1, 2, 'x', 'y'): " + spliceArray); // spliceArray has been modified
+console.log("Elements removed by splice: " + removedSpliceElements);
 
-// .slice() - NIE MUTUJE tablicy.
-// Zwraca PŁYTKĄ KOPIĘ fragmentu tablicy do nowej tablicy.
-// Oryginalna tablica pozostaje niezmieniona.
+/**
+ * `.slice()` - Does NOT mutate the array.
+ * Returns a SHALLOW COPY of a portion of an array into a new array.
+ * The original array remains unchanged.
+ * @param start - The index to begin extraction.
+ * @param end - The index before which to end extraction (exclusive).
+ */
 console.log("\n--- .slice() ---");
 const sliceArray = ['red', 'green', 'blue', 'yellow', 'purple'];
 console.log("Original sliceArray: " + sliceArray);
-const slicedPart = sliceArray.slice(1, 4); // Kopiuje elementy od indeksu 1 do 3 (4 jest wyłączone)
-console.log("slicedPart (od indeksu 1 do 3): " + slicedPart); // ['green', 'blue', 'yellow']
-console.log("sliceArray po slice(): " + sliceArray); // sliceArray pozostaje niezmienione
+const slicedPart = sliceArray.slice(1, 4); // Copies elements from index 1 up to (but not including) 4
+console.log("slicedPart (from index 1 to 3): " + slicedPart); // ['green', 'blue', 'yellow']
+console.log("sliceArray after slice(): " + sliceArray); // sliceArray remains unchanged
 
-// .indexOf() - NIE MUTUJE tablicy.
-// Zwraca indeks pierwszego wystąpienia podanego elementu w tablicy.
-// Zwraca -1, jeśli element nie zostanie znaleziony.
+/**
+ * `.indexOf()` - Does NOT mutate the array.
+ * Returns the first index at which a given element can be found in the array.
+ * Returns -1 if the element is not present.
+ */
 console.log("\n--- .indexOf() ---");
 const searchArray = ['apple', 'orange', 'apple', 'banana'];
 console.log("searchArray.indexOf('apple'): " + searchArray.indexOf('apple')); // 0
 console.log("searchArray.indexOf('grape'): " + searchArray.indexOf('grape')); // -1
 
-// .lastIndexOf() - NIE MUTUJE tablicy.
-// Zwraca indeks ostatniego wystąpienia podanego elementu w tablicy.
-// Zwraca -1, jeśli element nie zostanie znaleziony.
+/**
+ * `.lastIndexOf()` - Does NOT mutate the array.
+ * Returns the last index at which a given element can be found in the array.
+ * Returns -1 if the element is not present.
+ */
 console.log("\n--- .lastIndexOf() ---");
 console.log("searchArray.lastIndexOf('apple'): " + searchArray.lastIndexOf('apple')); // 2
 
-// .includes() - NIE MUTUJE tablicy.
-// Zwraca boolean (true/false) w zależności od tego, czy tablica zawiera dany element.
+/**
+ * `.includes()` - Does NOT mutate the array.
+ * Returns a boolean (true/false) indicating whether an array contains a certain element.
+ */
 console.log("\n--- .includes() ---");
 console.log("searchArray.includes('orange'): " + searchArray.includes('orange')); // true
 console.log("searchArray.includes('kiwi'): " + searchArray.includes('kiwi'));     // false
 
-// .join() - NIE MUTUJE tablicy.
-// Tworzy i zwraca nowy string, łącząc wszystkie elementy tablicy w jeden.
-// Można podać opcjonalny separator.
+/**
+ * `.join()` - Does NOT mutate the array.
+ * Creates and returns a new string by concatenating all of the elements in an array.
+ * An optional separator can be specified.
+ */
 console.log("\n--- .join() ---");
 const joinArray = ['alpha', 'beta', 'gamma'];
 console.log("joinArray.join('-'): " + joinArray.join('-')); // "alpha-beta-gamma"
-console.log("joinArray po join(): " + joinArray); // joinArray pozostaje niezmienione
+console.log("joinArray after join(): " + joinArray); // joinArray remains unchanged
 
-console.log("\n--- PODSUMOWANIE ZMIAN W arrStr ---");
-// Wyświetlamy końcowy stan arrStr, które było mutowane przez:
+console.log("\n--- FINAL STATE OF arrStr ---");
+// Displaying the final state of arrStr, which was mutated by:
 // arrStr[7] = "added";
-// arrStr.copyWithin(0, 3, 6); // Wcześniejsze użycie, które wpłynęło na arrStr
-// arrStr.sort(); // Jeśli było używane na arrStr bezpośrednio
+// arrStr.copyWithin(0, 3, 6); // Previous usage that affected arrStr
+// arrStr.sort(); // If it was used directly on arrStr at some point
 console.log("final arrStr[]: " + arrStr);
 
 
-// --- Sekcja 3: Typy obiektowe, aliasy i interfejsy ---
+// --- Section 3: Object Types, Aliases, and Interfaces ---
 
 /**
- * @section Typy obiektowe, aliasy i interfejsy
- * Przykłady definiowania i użycia struktur danych w TypeScript.
+ * @section Object Types, Aliases, and Interfaces
+ * Examples of defining and using data structures in TypeScript.
  */
 
-// 1. Deklaracja zmiennych z jawnym typowaniem
+/**
+ * 1. Variable Declarations with Explicit Typing
+ * Demonstrates basic variable declaration with type annotations.
+ */
 let nameVar: string = "Mateusz";
 const age: number = 22;
 const isStudent: boolean = true;
 
 // let num: number = 23;
-// nameVar = num; // Wynik próby przypisania: TS2322: Type 'number' is not assignable to type 'string'.
-                 // TypeScript wykrywa błąd typu na etapie kompilacji,
-                 // ponieważ `nameVar` jest typu `string`, a próbujemy przypisać `number`.
+// nameVar = num; // This line would cause a compile-time error (TS2322):
+//                // Type 'number' is not assignable to type 'string'.
+//                // TypeScript catches the type mismatch during compilation.
 
-// 2. Dodawanie stringa do liczby (co dzieje się w JavaScript/TypeScript)
+/**
+ * 2. String Concatenation with Numbers (Type Coercion)
+ * Explains how the `+` operator behaves in JavaScript/TypeScript when mixing strings and numbers.
+ * JavaScript performs "type coercion" (automatic type conversion).
+ */
 let numbers: number[] = [1, 2, 3, 4, 5];
 let fruits: string[] = ["apple", "banana", "cherry"];
 
-// W JavaScript/TypeScript, operator `+` działa jako dodawanie numeryczne LUB konkatenacja stringów.
-// Jeśli jeden z operandów jest stringiem, a drugi nie jest obiektem, to drugi operand
-// jest konwertowany na string i następuje konkatenacja.
-console.log(`Dodawanie stringa: ${fruits[0]} do liczby ${numbers[0]} `);
-console.log(`Wynik: ${numbers[0] + fruits[0]}`); // Wynik: "1apple" (liczba 1 staje się stringiem "1", a potem jest konkatenacja)
+// In JavaScript/TypeScript, the `+` operator acts as either numeric addition OR string concatenation.
+// If one of the operands is a string (and the other is not an object), the non-string operand
+// is converted to a string, and then concatenation occurs.
+console.log(`Adding string: ${fruits[0]} to number ${numbers[0]} `);
+console.log(`Result: ${numbers[0] + fruits[0]}`); // Output: "1apple" (number 1 becomes string "1", then concatenated)
 
-// To samo dzieje się tutaj, po prostu wcześniej skonkatenowaliśmy już "1apple"
-console.log(`Dodawanie stringa: ${fruits[0]} do "${numbers[0] + fruits[0]}" `);
-console.log(`Wynik: ${numbers[0] + fruits[0] + " do " + fruits[0]} `); // Wynik: "1apple do apple"
+// Same logic applies here, extending the concatenated string
+console.log(`Adding string: ${fruits[0]} to "${numbers[0] + fruits[0]}" `);
+console.log(`Result: ${numbers[0] + fruits[0] + " to " + fruits[0]} `); // Output: "1apple to apple"
 
-// Brak błędu, ponieważ JavaScript domyślnie konwertuje typy w tej operacji
-// ("type coercion" lub "type coversion"). TypeScript nie zgłasza błędu,
-// bo to jest zgodne z zachowaniem JS, choć może prowadzić do nieoczekiwanych wyników.
+// No error is reported by TypeScript because this behavior is consistent with JavaScript's
+// implicit type conversion ("type coercion"), though it can lead to unexpected results.
 
-// 3. Obiekty z typem `any` - brak sprawdzania struktury
+/**
+ * 3. Objects with `any` Type - Lacks Structure Checking
+ * Using `any` for objects bypasses TypeScript's structural type checking,
+ * allowing properties to be added dynamically at runtime without compiler warnings.
+ */
 let personExample: any = {
     name: "Adrian",
     age: 2,
@@ -304,85 +384,99 @@ let personSecondExample: any = {
     city: "Warszawa"
 };
 
-// Dzięki typowi `any`, możemy dodawać nowe właściwości w trakcie działania programu
-// bez żadnych ostrzeżeń ze strony TypeScripta.
+// With `any` type, we can add new properties at runtime without any TypeScript warnings.
 personExample.street = "Kwiatowa";
-console.log("personExample (z dodanym 'street'):", personExample);
+console.log("personExample (with 'street' added):", personExample);
 personSecondExample.street = "Kwiatowa";
-console.log("personSecondExample (z dodanym 'street'):", personSecondExample);
+console.log("personSecondExample (with 'street' added):", personSecondExample);
 
-// --- Sekcja 4: Interfejsy i typy aliasowe ---
+// --- Section 4: Interfaces and Type Aliases ---
 
 /**
- * @section Interfejsy i typy aliasowe
- * Definiowanie struktur obiektów za pomocą interfejsów i tworzenie aliasów typów.
- * Pokazuje również dziedziczenie interfejsów.
+ * @section Interfaces and Type Aliases
+ * Defines object structures using interfaces and creates type aliases.
+ * Also demonstrates interface inheritance.
  */
 
-// 1. Interfejsy i opcjonalne właściwości
+/**
+ * 1. Interfaces and Optional Properties
+ * Defines an interface `Product` with required and optional properties.
+ * Optional properties are marked with `?`.
+ */
 interface Product {
     id: number;
     name: string;
     price: number;
-    description?: string; // Opcjonalna właściwość (może być lub nie)
+    description?: string; // Optional property (may or may not be present)
 }
 
 let product1: Product = {
     id: 1,
-    name: "Mleko",
+    name: "Milk",
     price: 2.99
 };
 
 let product2: Product = {
     id: 2,
-    name: "Chleb",
+    name: "Bread",
     price: 1.99,
-    description: "Brązowy" // Opcjonalna właściwość jest podana
+    description: "Brown" // Optional property is provided
 };
 
-console.log("Produkt 1:", product1);
-console.log("Produkt 2:", product2);
+console.log("Product 1:", product1);
+console.log("Product 2:", product2);
 
 let productArray: Product[] = [product1, product2];
-console.log("\nIteracja po tablicy produktów:");
+console.log("\nIterating through product array:");
 for (let i = 0; i < productArray.length; i++) {
-    console.log(`- Nazwa: ${productArray[i].name}, Cena: ${productArray[i].price}`);
+    console.log(`- Name: ${productArray[i].name}, Price: ${productArray[i].price}`);
 }
 
-// Extra: Rozszerzanie obiektów za pomocą operatora spread (...)
-// Operator spread tworzy NOWY obiekt, kopiując wszystkie właściwości z istniejącego obiektu
-// i dodając/nadpisując nowe. Oryginalny obiekt (product3) pozostaje niezmieniony.
+/**
+ * Extra: Extending Objects with the Spread Operator (`...`)
+ * The spread operator creates a NEW object by copying all properties from an existing object
+ * and then adding/overwriting new ones. The original object remains unchanged.
+ */
 const product3: Product = {
     id: 3,
-    name: "Czekolada",
+    name: "Chocolate",
     price: 3.99,
-    description: "Czekoladowa"
+    description: "Chocolate"
 };
 
 const extendedProduct = {
-    ...product3, // Kopiuje id, name, price, description z product3
-    kcal: 300   // Dodaje nową właściwość 'kcal'
+    ...product3, // Copies id, name, price, description from product3
+    kcal: 300    // Adds a new property 'kcal'
 };
-console.log("\nRozszerzony produkt (extendedProduct):", extendedProduct);
+console.log("\nExtended Product (extendedProduct):", extendedProduct);
 
-// 2. Typy aliasowe (Type Aliases) - prostsze aliasy dla typów
-type ID = number; // Definiuje nowy alias typu 'ID', który jest w zasadzie `number`
+/**
+ * 2. Type Aliases - Simple Aliases for Types
+ * Defines a new type alias `ID` for the `number` type.
+ */
+type ID = number;
 let userID: ID = 1;
-console.log("ID użytkownika (alias typu):", userID);
+console.log("User ID (type alias):", userID);
 
-// 3. Typy aliasowe dla unii typów (Union Types) lub literałów
-type Status = ("available" | "unavailable" | "ordered"); // Definiuje typ, który może przyjąć tylko jedną z tych trzech wartości stringowych
+/**
+ * 3. Type Aliases for Union Types or Literals
+ * Defines a `Status` type that can only hold one of three specified string literal values.
+ */
+type Status = ("available" | "unavailable" | "ordered");
 let statusVar: Status = "available";
-console.log("Status produktu (typ literałowy):", statusVar);
-// statusVar = "pending"; // Ta linia spowodowałaby błąd typu: "Type '"pending"' is not assignable to type 'Status'."
+console.log("Product Status (literal type):", statusVar);
+// statusVar = "pending"; // This line would cause a type error: "Type '"pending"' is not assignable to type 'Status'."
 
-// 4. Dziedziczenie interfejsów
+/**
+ * 4. Interface Inheritance
+ * Demonstrates how one interface can extend another, inheriting its properties.
+ */
 interface Person {
     name: string;
     surname: string;
 }
 
-// Employee rozszerza Person, dodając swoje własne właściwości
+// `Employee` extends `Person`, adding its own specific properties.
 interface Employee extends Person {
     position: string;
     salary: number;
@@ -395,182 +489,194 @@ let employee1: Employee = {
     salary: 3000
 };
 
-console.log("Dane pracownika (dziedziczenie interfejsów):", employee1);
+console.log("Employee Data (interface inheritance):", employee1);
 
-// --- Sekcja 5: Funkcje i ich typowanie ---
+// --- Section 5: Functions and Their Typing ---
 
 /**
- * @section Funkcje i ich typowanie
- * Przykłady definiowania funkcji w TypeScript, w tym typowanie parametrów,
- * wartości zwracanych, parametry opcjonalne i typ `void`.
+ * @section Functions and Their Typing
+ * Examples of defining functions in TypeScript, including typing parameters,
+ * return values, optional parameters, and the `void` type.
  */
 
-// 1. Podstawowe funkcje z typowaniem parametrów i wartości zwracanej
-function add(a: number, b: number): number { // Parametry `a`, `b` są typu `number`, funkcja zwraca `number`
+/**
+ * 1. Basic Functions with Parameter and Return Value Typing
+ * Defines functions with explicit types for parameters and return values.
+ */
+function add(a: number, b: number): number { // Parameters `a`, `b` are `number`, function returns `number`
     return a + b;
 }
-console.log("Wynik dodawania (1+2):", add(1, 2));
-// console.log(add(1, "2")); // Ten kod spowodowałby błąd kompilacji:
-                             // TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+console.log("Addition Result (1+2):", add(1, 2));
+// console.log(add(1, "2")); // This would cause a compile-time error:
+                           // TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
-function welcome(name: string): string { // Parametr `name` jest typu `string`, funkcja zwraca `string`
+function welcome(name: string): string { // Parameter `name` is `string`, function returns `string`
     return "Hello, " + name;
 }
-console.log("Powitanie:", welcome("Mateusz"));
+console.log("Greeting:", welcome("Mateusz"));
 
-// 2. Funkcje z parametrami opcjonalnymi
-// Parametr `taxRate` jest opcjonalny (oznacza to `?`).
-// Jeśli nie zostanie podany, będzie `undefined`.
+/**
+ * 2. Functions with Optional Parameters
+ * Demonstrates an optional parameter (`taxRate?`), which can be `undefined` if not provided.
+ * Includes logic to assign a default value.
+ */
 function calculateTax(amount: number, taxRate?: number): number {
-    // Sprawdzamy, czy `taxRate` nie jest `null` ani `undefined`.
-    // Jeśli tak, przypisujemy mu domyślną wartość 0.23.
+    // Check if `taxRate` is null or undefined, and assign a default if so.
+    // An alternative is using the nullish coalescing operator `??` for conciseness:
+    // const actualTaxRate = taxRate ?? 0.23;
+    // return amount * actualTaxRate;
     if (taxRate === null || taxRate === undefined) {
         taxRate = 0.23;
     }
-    // Można też użyć operatora nullish coalescing `??` dla zwięzłości:
-    // const actualTaxRate = taxRate ?? 0.23;
-    // return amount * actualTaxRate;
     return amount * taxRate;
 }
-console.log("Podatek od 100 (stawka 0.1):", calculateTax(100, 0.1));
-console.log("Podatek od 100 (stawka domyślna):", calculateTax(100));
+console.log("Tax on 100 (rate 0.1):", calculateTax(100, 0.1));
+console.log("Tax on 100 (default rate):", calculateTax(100));
 
-// 3. Funkcje zwracające `void` (nic)
-// Funkcja `logMsg` nie zwraca żadnej wartości.
+/**
+ * 3. Functions Returning `void`
+ * A function returning `void` indicates that it does not return any meaningful value.
+ */
 function logMsg(msg: string): void {
-    console.log("Wiadomość do logu:", msg);
+    console.log("Message to log:", msg);
 }
 
 logMsg("Hello");
-logMsg(String(123)); // Konwersja liczby na string przed przekazaniem
+logMsg(String(123)); // Convert number to string before passing
 
-// --- Sekcja 6: Typy unii i interfejsy dla funkcji ---
+// --- Section 6: Union Types and Interfaces for Functions ---
 
 /**
- * @section Typy unii i interfejsy dla funkcji
- * Pokazuje użycie typów unii dla zmiennych i parametrów funkcji,
- * oraz interfejs dla definiowania kontraktu funkcji.
+ * @section Union Types and Interfaces for Functions
+ * Shows the use of union types for variables and function parameters,
+ * and an interface for defining a function contract.
  */
 
-// 1. Typ unii (Union Type) dla zmiennych
-// Zmienna `userId` może przechowywać wartość typu `string` LUB `number`.
-let userId: string | number; // union type
+/**
+ * 1. Union Type for Variables
+ * A `union type` allows a variable to hold a value of one of several specified types.
+ */
+let userId: string | number; // Union type: can be `string` OR `number`
 userId = "123";
-console.log("ID użytkownika (string):", userId);
+console.log("User ID (string):", userId);
 userId = 123;
-console.log("ID użytkownika (number):", userId);
+console.log("User ID (number):", userId);
 
-// Funkcja akceptująca parametr o typie unii
+/**
+ * Function accepting a union type parameter.
+ */
 function showInfo(data: string | number | boolean) {
-    console.log("Wyświetlana informacja:", data);
+    console.log("Displayed Information:", data);
 }
-showInfo("Ala ma kota");
+showInfo("Cat has a cat"); // Assuming "Ala ma kota" translated
 showInfo(42);
 showInfo(true);
 
-// 2. Interfejsy dla funkcji (kontrakt funkcji)
-// Interfejs `Loggable` definiuje, że każdy obiekt implementujący ten interfejs
-// musi posiadać metodę `log`, która przyjmuje string i zwraca `void`.
+/**
+ * 2. Interfaces for Functions (Function Contract)
+ * An interface can define the signature (contract) of a function.
+ * `Loggable` requires any implementing object to have a `log` method.
+ */
 interface Loggable {
     log(msg: string): void;
 }
 
-// Można by zaimplementować ten interfejs w klasie lub użyć go jako typ dla funkcji:
+// An object implementing the `Loggable` interface.
 const myLogger: Loggable = {
     log: (message: string) => {
         console.log("Custom Logger:", message);
     }
 };
-myLogger.log("To jest wiadomość z niestandardowego loggera.");
+myLogger.log("This is a message from the custom logger.");
 
-// --- Sekcja 7: Zaawansowane klasy i interfejsy (Kształty) ---
+// --- Section 7: Advanced Classes and Interfaces (Shapes) ---
 
 /**
- * @section Zaawansowane klasy i interfejsy (Kształty)
- * Przykłady interfejsów, klas abstrakcyjnych i dziedziczenia w TypeScript,
- * demonstrujące polimorfizm i enkapsulację za pomocą getterów/setterów.
+ * @section Advanced Classes and Interfaces (Shapes)
+ * Examples of interfaces, abstract classes, and inheritance in TypeScript,
+ * demonstrating polymorphism and encapsulation using getters/setters.
  */
 
-// --- Definicje interfejsów ---
+// --- Interface Definitions ---
 
 /**
  * @interface Drawable
- * Interfejs definiujący kontrakt dla obiektów, które potrafią się "rysować".
- * Wymaga implementacji metody `draw()`.
+ * Defines a contract for objects that can be "drawn".
+ * Requires the implementation of the `draw()` method.
  */
 interface Drawable {
     draw(): void;
 }
 
-// --- Definicje klas abstrakcyjnych i bazowych ---
+// --- Abstract and Base Class Definitions ---
 
 /**
  * @abstract class Shape
- * Abstrakcyjna klasa bazowa dla wszystkich kształtów geometrycznych.
- * Implementuje wspólne właściwości i metody, a także definiuje metody abstrakcyjne,
- * które muszą być zaimplementowane przez klasy dziedziczące.
- * Klasy abstrakcyjnej nie można bezpośrednio instancjonować (utworzyć obiektu).
+ * Abstract base class for all geometric shapes.
+ * Implements common properties and methods, and defines abstract methods
+ * that *must* be implemented by derived classes.
+ * An abstract class cannot be instantiated directly (cannot create an object from it).
  */
 abstract class Shape {
     /**
-     * @param name - Nazwa kształtu. Jest chronioną (protected) właściwością,
-     * co oznacza, że jest dostępna w tej klasie i klasach dziedziczących.
-     * Dzięki użyciu 'protected' w parametrze konstruktora, TypeScript
-     * automatycznie tworzy i inicjalizuje właściwość 'name'.
-     * Posiada domyślną wartość "Shape", jeśli nie zostanie podana.
+     * @param name - The name of the shape. It's a `protected` property,
+     * meaning it's accessible within this class and its derived classes.
+     * By using 'protected' in the constructor parameter, TypeScript
+     * automatically creates and initializes the `name` property.
+     * Has a default value of "Shape" if not provided.
      */
     constructor(
         protected name: string = "Shape"
     ) {
-        // Ciało konstruktora klasy bazowej. Tutaj można by dodać dodatkową logikę
-        // inicjalizacyjną wspólną dla wszystkich kształtów.
+        // Constructor body for the base class. Additional common initialization
+        // logic for all shapes could be added here.
     }
 
     /**
      * @abstract calcArea()
-     * Abstrakcyjna metoda, która musi być zaimplementowana przez każdą klasę dziedziczącą.
-     * Odpowiada za obliczenie pola powierzchni kształtu.
-     * @returns {number} Pole powierzchni kształtu.
+     * An abstract method that *must* be implemented by every inheriting class.
+     * Responsible for calculating the area of the shape.
+     * @returns {number} The area of the shape.
      */
     abstract calcArea(): number;
 
     /**
      * @method getName()
-     * Metoda zwracająca nazwę kształtu.
-     * @returns {string} Nazwa kształtu.
+     * Returns the name of the shape.
+     * @returns {string} The name of the shape.
      */
     getName(): string {
         return this.name;
     }
 }
 
-// --- Definicje konkretnych klas kształtów ---
+// --- Concrete Shape Class Definitions ---
 
 /**
  * @class Square
- * Klasa reprezentująca kwadrat, dziedzicząca po Shape i implementująca Drawable.
+ * Represents a square, inheriting from `Shape` and implementing `Drawable`.
  */
 class Square extends Shape implements Drawable {
     /**
-     * @param name - Nazwa kwadratu, przekazywana do konstruktora klasy bazowej Shape.
-     * @param side - Długość boku kwadratu. Jest to prywatna właściwość (private),
-     * utworzona i zainicjalizowana automatycznie przez TypeScript
-     * dzięki modyfikatorowi 'private' w parametrze konstruktora.
-     * Posiada domyślną wartość 0, jeśli nie zostanie podana.
+     * @param name - The name of the square, passed to the base class `Shape` constructor.
+     * @param side - The length of the square's side. This is a `private` property,
+     * automatically created and initialized by TypeScript
+     * due to the 'private' modifier in the constructor parameter.
+     * Has a default value of 0 if not provided.
      */
     constructor(
         name: string,
         private side: number = 0
     ) {
-        super(name); // Wywołanie konstruktora klasy bazowej Shape
-        // Brak 'this.side = side;' - jest zbędne dzięki 'private side' w parametrze
+        super(name); // Call the base class `Shape` constructor
+        // No need for 'this.side = side;' - handled by 'private side' in parameter
     }
 
     /**
      * @method calcArea()
-     * Implementacja abstrakcyjnej metody z klasy bazowej Shape.
-     * Oblicza pole powierzchni kwadratu.
-     * @returns {number} Pole powierzchni kwadratu.
+     * Implementation of the abstract method from the `Shape` base class.
+     * Calculates the area of the square.
+     * @returns {number} The area of the square.
      */
     calcArea(): number {
         return this.side * this.side;
@@ -578,18 +684,18 @@ class Square extends Shape implements Drawable {
 
     /**
      * @method draw()
-     * Implementacja metody z interfejsu Drawable.
-     * Symuluje rysowanie kwadratu.
+     * Implementation of the method from the `Drawable` interface.
+     * Simulates drawing a square.
      */
     draw(): void {
-        console.log("draw square");
+        console.log("Drawing a square.");
     }
 
     /**
      * @method getSide()
-     * Publiczny "getter" dla prywatnej właściwości 'side'.
-     * Umożliwia bezpieczny odczyt wartości boku kwadratu z zewnątrz klasy.
-     * @returns {number} Długość boku kwadratu.
+     * Public "getter" for the private `side` property.
+     * Allows safe reading of the square's side length from outside the class.
+     * @returns {number} The length of the square's side.
      */
     getSide(): number {
         return this.side;
@@ -597,15 +703,15 @@ class Square extends Shape implements Drawable {
 
     /**
      * @method setSide()
-     * Publiczny "setter" dla prywatnej właściwości 'side'.
-     * Umożliwia bezpieczną modyfikację wartości boku kwadratu z zewnątrz klasy.
-     * Tutaj można dodać logikę walidacji, np. aby zapobiec ustawieniu ujemnej wartości.
-     * @param side - Nowa długość boku.
+     * Public "setter" for the private `side` property.
+     * Allows safe modification of the square's side length from outside the class.
+     * Validation logic can be added here, e.g., to prevent setting a negative value.
+     * @param side - The new side length.
      */
     setSide(side: number): void {
-        // Przykład walidacji:
+        // Example validation:
         if (side < 0) {
-            console.warn("Długość boku nie może być ujemna. Wartość nie została zmieniona.");
+            console.warn("Side length cannot be negative. Value not changed.");
             return;
         }
         this.side = side;
@@ -614,26 +720,26 @@ class Square extends Shape implements Drawable {
 
 /**
  * @class Circle
- * Klasa reprezentująca koło, dziedzicząca po Shape i implementująca Drawable.
+ * Represents a circle, inheriting from `Shape` and implementing `Drawable`.
  */
 class Circle extends Shape implements Drawable {
     /**
-     * @param name - Nazwa koła, przekazywana do konstruktora klasy bazowej Shape.
-     * @param radius - Długość promienia koła. Prywatna właściwość, automatycznie
-     * utworzona i zainicjalizowana. Domyślna wartość to 0.
+     * @param name - The name of the circle, passed to the base class `Shape` constructor.
+     * @param radius - The length of the circle's radius. A private property, automatically
+     * created and initialized. Default value is 0.
      */
     constructor(
         name: string,
         private radius: number = 0
     ) {
-        super(name); // Wywołanie konstruktora klasy bazowej Shape
+        super(name); // Call the base class `Shape` constructor
     }
 
     /**
      * @method calcArea()
-     * Implementacja abstrakcyjnej metody z klasy bazowej Shape.
-     * Oblicza pole powierzchni koła.
-     * @returns {number} Pole powierzchni koła.
+     * Implementation of the abstract method from the `Shape` base class.
+     * Calculates the area of the circle.
+     * @returns {number} The area of the circle.
      */
     calcArea(): number {
         return Math.PI * this.radius * this.radius;
@@ -641,17 +747,17 @@ class Circle extends Shape implements Drawable {
 
     /**
      * @method draw()
-     * Implementacja metody z interfejsu Drawable.
-     * Symuluje rysowanie koła.
+     * Implementation of the method from the `Drawable` interface.
+     * Simulates drawing a circle.
      */
     draw(): void {
-        console.log("draw circle");
+        console.log("Drawing a circle.");
     }
 
     /**
      * @method getRadius()
-     * Publiczny "getter" dla prywatnej właściwości 'radius'.
-     * @returns {number} Długość promienia koła.
+     * Public "getter" for the private `radius` property.
+     * @returns {number} The length of the circle's radius.
      */
     getRadius(): number {
         return this.radius;
@@ -659,93 +765,104 @@ class Circle extends Shape implements Drawable {
 
     /**
      * @method setRadius()
-     * Publiczny "setter" dla prywatnej właściwości 'radius'.
-     * @param radius - Nowa długość promienia.
+     * Public "setter" for the private `radius` property.
+     * @param radius - The new radius length.
      */
     setRadius(radius: number): void {
-        // Przykład walidacji:
+        // Example validation:
         if (radius < 0) {
-            console.warn("Promień nie może być ujemny. Wartość nie została zmieniona.");
+            console.warn("Radius cannot be negative. Value not changed.");
             return;
         }
         this.radius = radius;
     }
 }
 
-// --- Przykładowe użycie klas ---
+// --- Example Usage of Classes ---
 
-console.log("--- Tworzenie i testowanie pojedynczych obiektów ---");
+console.log("--- Creating and Testing Individual Objects ---");
 
-const square = new Square("Kwadrat 5x5", 5);
-console.log(`${square.getName()} | Pole: ${square.calcArea().toFixed(2)} | Bok: ${square.getSide()}`);
+const square = new Square("Square 5x5", 5);
+console.log(`${square.getName()} | Area: ${square.calcArea().toFixed(2)} | Side: ${square.getSide()}`);
 
-const circle = new Circle("Koło R=3", 3);
-console.log(`${circle.getName()} | Pole: ${circle.calcArea().toFixed(2)} | Promień: ${circle.getRadius()}`);
+const circle = new Circle("Circle R=3", 3);
+console.log(`${circle.getName()} | Area: ${circle.calcArea().toFixed(2)} | Radius: ${circle.getRadius()}`);
 
-console.log("\n--- Modyfikacja wartości przez settery ---");
+console.log("\n--- Modifying Values via Setters ---");
 square.setSide(7);
-console.log(`${square.getName()} (po zmianie boku) | Pole: ${square.calcArea().toFixed(2)} | Nowy bok: ${square.getSide()}`);
-circle.setRadius(-1); // Próba ustawienia niepoprawnej wartości
-console.log(`${circle.getName()} (po próbie zmiany promienia na -1) | Promień: ${circle.getRadius()}`); // Promień nie powinien się zmienić
+console.log(`${square.getName()} (after side change) | Area: ${square.calcArea().toFixed(2)} | New Side: ${square.getSide()}`);
+circle.setRadius(-1); // Attempt to set an invalid value
+console.log(`${circle.getName()} (after attempt to change radius to -1) | Radius: ${circle.getRadius()}`); // Radius should not change
 
-console.log("\n--- Użycie polimorfizmu z tablicą ---");
+console.log("\n--- Using Polymorphism with an Array ---");
 
-// Tablica może przechowywać obiekty, które są zarówno Shape, jak i Drawable.
+// An array can hold objects that are both `Shape` and `Drawable`.
 const arrShapes: (Shape & Drawable)[] = [];
 arrShapes.push(square);
 arrShapes.push(circle);
-arrShapes.push(new Square("Mały Kwadrat", 2));
-arrShapes.push(new Circle("Duże Koło", 7));
+arrShapes.push(new Square("Small Square", 2));
+arrShapes.push(new Circle("Large Circle", 7));
 
 
 for (const shape of arrShapes) {
-    // Możemy wywoływać metody zarówno z Shape, jak i z Drawable
-    console.log(`\n--- Informacje o ${shape.getName()} ---`);
-    shape.draw(); // Metoda z interfejsu Drawable
-    console.log(`Pole: ${shape.calcArea().toFixed(2)}`); // Metoda z klasy bazowej Shape
+    // We can call methods from both `Shape` and `Drawable` interfaces.
+    console.log(`\n--- Information about ${shape.getName()} ---`);
+    shape.draw(); // Method from `Drawable` interface
+    console.log(`Area: ${shape.calcArea().toFixed(2)}`); // Method from `Shape` base class
 
-    // Jeśli potrzebujemy specyficznych metod (jak getSide() / getRadius()),
-    // musimy sprawdzić typ obiektu za pomocą 'instanceof'.
+    // If we need specific methods (like getSide() / getRadius()),
+    // we must check the object's type using `instanceof`.
     if (shape instanceof Square) {
-        console.log(`Długość boku (specyficzna dla Kwadratu): ${shape.getSide()}`);
+        console.log(`Side Length (specific to Square): ${shape.getSide()}`);
     } else if (shape instanceof Circle) {
-        console.log(`Długość promienia (specyficzna dla Koła): ${shape.getRadius()}`);
+        console.log(`Radius Length (specific to Circle): ${shape.getRadius()}`);
     }
 }
 
-// --- Próba instancjonowania klasy abstrakcyjnej (pokazuje błąd kompilacji) ---
-// const shapeExample: Shape = new Shape("Ogólny Kształt");
-// Powyższa linia spowodowałaby błąd TS2511: Cannot create an instance of an abstract class.
-// (Nie można utworzyć instancji klasy abstrakcyjnej).
+// --- Attempting to Instantiate an Abstract Class (Shows Compile-time Error) ---
+// const shapeExample: Shape = new Shape("General Shape");
+// The line above would cause a TS2511 error: Cannot create an instance of an abstract class.
 
 
-//leetcode task
-// Given a circular array nums, find the maximum absolute difference between adjacent elements.
-// Note: The first and last elements are considered adjacent in a circular array.
-
-// Example 1:
-// Input: nums = [1,2,4]
-// Output: 3
-// Explanation: The maximum absolute difference is between nums[0] and nums[2]: |4 - 1| = 3.
-
-// Example 2:
-// Input: nums = [-5,-10,-5]
-// Output: 5
-// Explanation: The maximum absolute difference is between nums[0] and nums[1]: |-5 - (-10)| = 5.
-
+/**
+ * @function maxAdjacentDistance
+ * Given a circular array `nums`, finds the maximum absolute difference between adjacent elements.
+ * The first and last elements are considered adjacent in a circular array.
+ *
+ * @param nums - An array of numbers.
+ * @returns {number} The maximum absolute difference between adjacent elements.
+ * Returns 0 if input constraints are not met.
+ *
+ * @example
+ * // Example 1:
+ * // Input: nums = [1,2,4]
+ * // Output: 3
+ * // Explanation: The maximum absolute difference is between nums[0] and nums[2]: |4 - 1| = 3.
+ *
+ * @example
+ * // Example 2:
+ * // Input: nums = [-5,-10,-5]
+ * // Output: 5
+ * // Explanation: The maximum absolute difference is between nums[0] and nums[1]: |-5 - (-10)| = 5.
+ */
 function maxAdjacentDistance(nums: number[]): number {
+    // Input validation checks for array length and element value range.
     if (
-        nums.length < 2 
-        || nums.length > 100
-        || nums.some(i => i > 100 || i < -100)
+        nums.length < 2 ||   // Array must have at least 2 elements
+        nums.length > 100 || // Array length must not exceed 100
+        nums.some(i => i > 100 || i < -100) // All elements must be between -100 and 100 (inclusive)
     ) {
-        console.log(`Incorrect input data.`);
-        return 0;
+        console.log(`Incorrect input data. Constraints: length >= 2, length <= 100, -100 <= element <= 100.`);
+        return 0; // Return 0 for invalid input as per problem statement or a specific error handling
     }
 
-    let maxAbsoluteDiff = Math.abs(nums[0] - nums[nums.length-1]);
-    for (let i = 0; i < nums.length-1; i++) {
-        const currentCompare = Math.abs(nums[i] - nums[i+1]);
+    // Initialize `maxAbsoluteDiff` with the difference between the first and last elements
+    // because it's a circular array.
+    let maxAbsoluteDiff = Math.abs(nums[0] - nums[nums.length - 1]);
+
+    // Iterate through adjacent elements to find the maximum difference
+    for (let i = 0; i < nums.length - 1; i++) {
+        const currentCompare = Math.abs(nums[i] - nums[i + 1]);
         if (currentCompare > maxAbsoluteDiff) {
             maxAbsoluteDiff = currentCompare;
         }
@@ -753,15 +870,31 @@ function maxAdjacentDistance(nums: number[]): number {
     return maxAbsoluteDiff;
 }
 
-// move from another file
-// export function textAnalyzer(text: string): number{
+// --- Moved from another file (commented out as per original) ---
+
+// /**
+//  * @function textAnalyzer
+//  * Analyzes a given text to count the number of unique words.
+//  * Words are split by spaces.
+//  * @param text - The input string to analyze.
+//  * @returns {number} The count of unique words in the text.
+//  */
+// export function textAnalyzer(text: string): number {
 //     const words = text.split(' ');
 //     const uniqueWords = new Set(words);
 //     return uniqueWords.size;
 // }
 
+// /**
+//  * @function log
+//  * A utility function for logging messages with different severity levels.
+//  * Can be conditionally enabled/disabled based on environment variables (e.g., development mode).
+//  * @param message - The message string to log.
+//  * @param level - The logging level ('info', 'warn', 'error'). Defaults to 'info'.
+//  * @returns {void}
+//  */
 // export function log(message: string, level: 'info' | 'warn' | 'error' = 'info'): void {
-//     // if (process.env.NODE_ENV === 'development') {
+//     // if (process.env.NODE_ENV === 'development') { // Example of environment-based logging control
 //         if (level === 'info') {
 //             console.log(message);
 //         } else if (level === 'warn') {
@@ -769,6 +902,87 @@ function maxAdjacentDistance(nums: number[]): number {
 //         } else if (level === 'error') {
 //             console.error(message);
 //         }
-//     //
+//     // }
 // }
-//
+
+
+function multiply(a: number, b: number): number {
+  return a * b;
+}
+
+async function runMultiplications() {
+  const a = 42;
+  const b = 73;
+
+  for (let i = 0; i < 1000; i++) {
+    multiply(a, b);
+  }
+}
+
+// To perform 1000 multiplications exactly per second (i.e., about 1 multiplication every 1 ms),
+// you can add a delay between each call:
+function delay(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function runWithTiming() {
+  const a = 42;
+  const b = 73;
+
+  for (let i = 0; i < 1000; i++) {
+    multiply(a, b);
+    await delay(1); // 1 ms delay to spread 1000 multiplications over 1 second
+  }
+}
+
+// Run:
+runWithTiming();
+
+
+
+/**
+ * Finds two elements in an array that sum up to the given target.
+ * Returns an array with the indices of the two elements or an empty array if no such pair is found.
+ * The array is traversed from left to right, and the first pair found is returned.
+ * @param nums The array of numbers to search in.
+ * @param target The target sum.
+ * @returns An array with two indices or an empty array.
+ */
+function twoSum(nums: number[], target: number): number[] {
+    for(let i=0, j=1; i<nums.length-1; i++, j=i+1)
+    {
+        for(; j<nums.length; j++){
+            if ((nums[i] + nums[j]) === target){
+                return [i, j];
+            }
+        }
+    }
+    return [];
+};
+
+const result = twoSum([2,7,11,14], 25);
+console.log(result);
+
+/**
+ * Finds two elements in an array that sum up to the given target.
+ * Returns an array with the indices of the two elements or an empty array if no such pair is found.
+ * The array is traversed from left to right, and the first pair found is returned.
+ * @param nums The array of numbers to search in.
+ * @param target The target sum.
+ * @returns An array with two indices or an empty array.
+ */
+function twoSumV2(nums: number[], target: number): number[] {
+    if (!nums || nums.length < 2) { // Dodatkowe sprawdzenie
+        return [];
+    }
+
+    const map = new Map<number, number>();
+    for (let i = 0; i < nums.length; i++) {
+        const complement = target - nums[i];
+        if (map.has(complement)) {
+            return [map.get(complement)!, i];
+        }
+        map.set(nums[i], i);
+    }
+    return [];
+};

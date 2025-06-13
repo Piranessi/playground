@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "esnext",
+    "target": "es2024",
     "module": "commonjs", // Zależnie od tego, jak importujesz moduły
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
