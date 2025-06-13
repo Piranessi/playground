@@ -1,5 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/react_frontend/(.*)", "destination": "/react_frontend/index.html" }
-  ]
-}
