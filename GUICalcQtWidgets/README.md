@@ -1,0 +1,2 @@
+# GUICalcQtWidgets
+Beginnings with Qt.
