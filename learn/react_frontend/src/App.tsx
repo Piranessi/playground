@@ -10,7 +10,10 @@ import './App.css';
 function App() {
   // --- State Declarations ---
   // Numeric counter for general demonstration
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<number>(() =>{
+    const storedCount = localStorage.getItem('count');
+    return storedCount ? parseInt(storedCount, 10) : 0;
+  });
   // String state, modified by appending a dot on click
   const [name, setName] = useState("test");
   // Boolean state for simple toggling behavior
@@ -48,6 +51,28 @@ function App() {
   useEffect(() => {
     console.log(`[log from useEffect] isButtonActive2 changed to: ${isButtonActive2}`);
   }, [isButtonActive2]);
+
+  /**
+   * Effect hook to load the `count` state from localStorage.
+   * Runs once on component mount.
+   */
+  useEffect(() => {
+    const savedCounter = localStorage.getItem('count');
+    console.log("🔄 Odczyt z localStorage przy starcie:", savedCounter);
+    if (savedCounter !== null) {
+      setCount(parseInt(savedCounter));
+    }
+  }, []);
+
+
+  /**
+   * Effect hook to save the `count` state to localStorage.
+   * Runs whenever the `count` variable is updated.
+   */
+  useEffect(() => {
+    console.log("Zapisuję count do localStorage:", count);
+    localStorage.setItem('count', count.toString());
+  }, [count]);
 
   // --- Event Handlers ---
   /**
