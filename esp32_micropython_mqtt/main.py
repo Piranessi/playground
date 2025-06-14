@@ -277,7 +277,7 @@ else:
                         try:
                             net_connection = network.WLAN(network.STA_IF)
                             net_connection.active(True)
-                            net_connection.connect('zyku24', d['wifi_password']) #net_connection.connect(d['wifi_ssid'], d['wifi_password'])
+                            net_connection.connect('', d['wifi_password']) #net_connection.connect(d['wifi_ssid'], d['wifi_password'])
 
                             client.set_callback(sub_cb)
                             client.connect()
@@ -302,7 +302,7 @@ else:
                 info_blinker(2)
                 net_connection = network.WLAN(network.AP_IF)
                 net_connection.active(True)
-                net_connection.config(password="wdsetup1", essid="WD_rolety", authmode=network.AUTH_WPA_WPA2_PSK)
+                net_connection.config(password="--", essid="WD_rolety", authmode=network.AUTH_WPA_WPA2_PSK)
                 addr = socket.getaddrinfo('0.0.0.0', 3000)[0][-1]
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.bind(addr)

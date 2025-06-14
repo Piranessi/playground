@@ -10,8 +10,8 @@ void taskWiFiHandler(void * parameter){
 
     //for now hardcoded
     ((shuttersStruct *)parameter)->preferences.begin("storage", false);
-    ((shuttersStruct *)parameter)->preferences.putString("ssid", "zyku24"); 
-    ((shuttersStruct *)parameter)->preferences.putString("password", "jarecki1!"); 
+    ((shuttersStruct *)parameter)->preferences.putString("ssid", ""); 
+    ((shuttersStruct *)parameter)->preferences.putString("password", "!"); 
     ssid = ((shuttersStruct *)parameter)->preferences.getString("ssid"); 
     password = ((shuttersStruct *)parameter)->preferences.getString("password");
     ((shuttersStruct *)parameter)->preferences.end();
