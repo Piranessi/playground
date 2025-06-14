@@ -1043,3 +1043,29 @@ function twoSumV2(nums: number[], target: number): number[] {
   }
   return [];
 }
+
+/**
+ * Calculates the difference between the maximum and minimum possible numbers that can be obtained by changing the digits of the given number.
+ * For example, if the input number is 123, the maximum possible number is 963 and the minimum possible number is 023.
+ * @param num - The input number.
+ * @returns {number} The difference between the maximum and minimum possible numbers.
+ */
+function minMaxDifference(num: number): number {
+  const numString = num.toString();
+
+  const min = numString
+    .split("")
+    .map((ch) => (ch === numString[0] ? "0" : ch))
+    .join("");
+
+  const digitIndexForMax = [...numString].findIndex((ch) => ch !== "9");
+  let max = numString;
+  if (digitIndexForMax !== -1) {
+    max = numString
+      .split("")
+      .map((ch) => (ch === numString[digitIndexForMax] ? "9" : ch))
+      .join("");
+  }
+
+  return parseInt(max) - parseInt(min);
+}
