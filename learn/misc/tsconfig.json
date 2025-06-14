@@ -8,7 +8,5 @@
     "skipLibCheck": true,
     "lib": ["es2024", "dom"] // Explicitly include 'dom' if for browser environment
   },
-  "include": [
-    "w1.ts"
-  ]
+  "include": ["w1.ts"]
 }

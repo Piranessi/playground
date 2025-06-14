@@ -65,8 +65,24 @@ console.log("anyVar (after rounding): " + anyVar);
  * Highlights whether a method mutates (changes) the original array or returns a new one.
  */
 
-const arrStr: string[] = ["abc", "cde", "fgh", "ijk", "asdd23", "asdd234", "asdd623"];
-const arrStr2: string[] = ["1abc", "1cde", "1fgh,", "1ijk", "1asdd23", "11133", "111"];
+const arrStr: string[] = [
+  "abc",
+  "cde",
+  "fgh",
+  "ijk",
+  "asdd23",
+  "asdd234",
+  "asdd623",
+];
+const arrStr2: string[] = [
+  "1abc",
+  "1cde",
+  "1fgh,",
+  "1ijk",
+  "1asdd23",
+  "11133",
+  "111",
+];
 
 console.log("\n--- Array Methods (Part 1) ---");
 
@@ -76,7 +92,9 @@ console.log("\n--- Array Methods (Part 1) ---");
  * applying a provided function to each element of the original array.
  */
 console.log("\n--- .map() ---");
-console.log("arrStr (map to uppercase): " + arrStr.map(item => item.toUpperCase()));
+console.log(
+  "arrStr (map to uppercase): " + arrStr.map((item) => item.toUpperCase()),
+);
 console.log("arrStr after map(): " + arrStr); // arrStr remains unchanged
 
 /**
@@ -85,7 +103,9 @@ console.log("arrStr after map(): " + arrStr); // arrStr remains unchanged
  * the provided callback function returns `true`.
  */
 console.log("\n--- .filter() ---");
-console.log("arrStr (words with > 3 chars): " + arrStr.filter(item => item.length > 3));
+console.log(
+  "arrStr (words with > 3 chars): " + arrStr.filter((item) => item.length > 3),
+);
 console.log("arrStr after filter(): " + arrStr); // arrStr remains unchanged
 
 /**
@@ -96,7 +116,7 @@ console.log("arrStr after filter(): " + arrStr); // arrStr remains unchanged
  */
 console.log("\n--- Modification by Index ---");
 arrStr[7] = "added"; // Adds an element at index 7 (if it doesn't exist, expands array)
-console.log("arrStr after arrStr[7] = \"added\": " + arrStr); // arrStr is now longer and includes "added"
+console.log('arrStr after arrStr[7] = "added": ' + arrStr); // arrStr is now longer and includes "added"
 
 /**
  * `.at()` - Does NOT mutate the array.
@@ -120,10 +140,10 @@ console.log("arrStr after concat(): " + arrStr); // arrStr and arrStr2 remain un
  * Does not change the length of the array.
  */
 console.log("\n--- .copyWithin() ---");
-const arrCopyWithinTest = ['a', 'b', 'c', 'd', 'e', 'f'];
+const arrCopyWithinTest = ["a", "b", "c", "d", "e", "f"];
 console.log("Original arrCopyWithinTest: " + arrCopyWithinTest);
 arrCopyWithinTest.copyWithin(0, 3, 6); // Copies elements from index 3 up to (but not including) 6 (d, e, f)
-                                     // and pastes them starting from index 0.
+// and pastes them starting from index 0.
 console.log("arrCopyWithinTest.copyWithin(0, 3, 6): " + arrCopyWithinTest); // arrCopyWithinTest has been modified
 
 /**
@@ -133,7 +153,7 @@ console.log("arrCopyWithinTest.copyWithin(0, 3, 6): " + arrCopyWithinTest); // a
  */
 console.log("\n--- .entries() ---");
 for (const [index, value] of arrStr.entries()) {
-    console.log(`${index}: ${value}`);
+  console.log(`${index}: ${value}`);
 }
 
 /**
@@ -145,14 +165,20 @@ for (const [index, value] of arrStr.entries()) {
  * Returns `true` if the provided callback function returns `true` for ALL elements in the array.
  */
 console.log("\n--- .every() ---");
-console.log("arrStr.every(item => item.length > 3): " + arrStr.every(item => item.length > 3));
+console.log(
+  "arrStr.every(item => item.length > 3): " +
+    arrStr.every((item) => item.length > 3),
+);
 
 /**
  * `.some()` - Does NOT mutate the array.
  * Returns `true` if the provided callback function returns `true` for AT LEAST ONE element in the array.
  */
 console.log("\n--- .some() ---");
-console.log("arrStr.some(item => item.length > 3): " + arrStr.some(item => item.length > 3));
+console.log(
+  "arrStr.some(item => item.length > 3): " +
+    arrStr.some((item) => item.length > 3),
+);
 
 /**
  * `.find()` - Does NOT mutate the array.
@@ -160,7 +186,10 @@ console.log("arrStr.some(item => item.length > 3): " + arrStr.some(item => item.
  * Returns `undefined` if no elements satisfy the condition.
  */
 console.log("\n--- .find() ---");
-console.log("arrStr.find(item => item.length > 3): " + arrStr.find(item => item.length > 3));
+console.log(
+  "arrStr.find(item => item.length > 3): " +
+    arrStr.find((item) => item.length > 3),
+);
 
 /**
  * `.findIndex()` - Does NOT mutate the array.
@@ -168,7 +197,10 @@ console.log("arrStr.find(item => item.length > 3): " + arrStr.find(item => item.
  * Returns `-1` if no elements satisfy the condition.
  */
 console.log("\n--- .findIndex() ---");
-console.log("arrStr.findIndex(item => item.length > 3): " + arrStr.findIndex(item => item.length > 3));
+console.log(
+  "arrStr.findIndex(item => item.length > 3): " +
+    arrStr.findIndex((item) => item.length > 3),
+);
 
 /**
  * `.sort()` - MUTATES the array.
@@ -192,7 +224,7 @@ console.log("numbersToSort.sort() (numerically): " + numbersToSort); // numbersT
 console.log("\n--- .forEach() ---");
 console.log("Iteration with .forEach():");
 arrStr.forEach((item, index) => {
-    console.log(`Element ${index}: ${item}`);
+  console.log(`Element ${index}: ${item}`);
 });
 console.log("arrStr after forEach(): " + arrStr); // arrStr remains unchanged
 
@@ -202,7 +234,10 @@ console.log("arrStr after forEach(): " + arrStr); // arrStr remains unchanged
  * resulting in a single output value.
  */
 console.log("\n--- .reduce() ---");
-const sumOfLengths = arrStr.reduce((accumulator, currentValue) => accumulator + currentValue.length, 0);
+const sumOfLengths = arrStr.reduce(
+  (accumulator, currentValue) => accumulator + currentValue.length,
+  0,
+);
 console.log("Sum of string lengths in arrStr (reduce): " + sumOfLengths);
 const combinedString = arrStr.reduce((acc, val) => acc + " " + val);
 console.log("Combined strings from arrStr (reduce): " + combinedString);
@@ -213,9 +248,9 @@ console.log("arrStr after reduce(): " + arrStr); // arrStr remains unchanged
  * Adds one or more elements to the end of an array and returns the new length of the array.
  */
 console.log("\n--- .push() ---");
-const pushArray = ['apple', 'banana'];
+const pushArray = ["apple", "banana"];
 console.log("Original pushArray: " + pushArray);
-const newLength = pushArray.push('orange', 'grape');
+const newLength = pushArray.push("orange", "grape");
 console.log("pushArray after push(): " + pushArray); // pushArray has been modified
 console.log("New length: " + newLength);
 
@@ -224,7 +259,7 @@ console.log("New length: " + newLength);
  * Removes the LAST element from an array and returns that removed element.
  */
 console.log("\n--- .pop() ---");
-const popArray = ['one', 'two', 'three'];
+const popArray = ["one", "two", "three"];
 console.log("Original popArray: " + popArray);
 const removedElement = popArray.pop();
 console.log("popArray after pop(): " + popArray); // popArray has been modified
@@ -235,7 +270,7 @@ console.log("Removed element: " + removedElement);
  * Removes the FIRST element from an array and returns that removed element.
  */
 console.log("\n--- .shift() ---");
-const shiftArray = ['first', 'second', 'third'];
+const shiftArray = ["first", "second", "third"];
 console.log("Original shiftArray: " + shiftArray);
 const shiftedElement = shiftArray.shift();
 console.log("shiftArray after shift(): " + shiftArray); // shiftArray has been modified
@@ -246,9 +281,9 @@ console.log("Removed element: " + shiftedElement);
  * Adds one or more elements to the BEGINNING of an array and returns the new length of the array.
  */
 console.log("\n--- .unshift() ---");
-const unshiftArray = ['middle', 'last'];
+const unshiftArray = ["middle", "last"];
 console.log("Original unshiftArray: " + unshiftArray);
-const newUnshiftLength = unshiftArray.unshift('new_first', 'new_second');
+const newUnshiftLength = unshiftArray.unshift("new_first", "new_second");
 console.log("unshiftArray after unshift(): " + unshiftArray); // unshiftArray has been modified
 console.log("New length: " + newUnshiftLength);
 
@@ -261,10 +296,10 @@ console.log("New length: " + newUnshiftLength);
  * @param items - Elements to add to the array, starting at the `start` index.
  */
 console.log("\n--- .splice() ---");
-const spliceArray = ['a', 'b', 'c', 'd', 'e'];
+const spliceArray = ["a", "b", "c", "d", "e"];
 console.log("Original spliceArray: " + spliceArray);
 // Remove 2 elements from index 1 ('b', 'c'), and add 'x', 'y'
-const removedSpliceElements = spliceArray.splice(1, 2, 'x', 'y');
+const removedSpliceElements = spliceArray.splice(1, 2, "x", "y");
 console.log("spliceArray after splice(1, 2, 'x', 'y'): " + spliceArray); // spliceArray has been modified
 console.log("Elements removed by splice: " + removedSpliceElements);
 
@@ -276,7 +311,7 @@ console.log("Elements removed by splice: " + removedSpliceElements);
  * @param end - The index before which to end extraction (exclusive).
  */
 console.log("\n--- .slice() ---");
-const sliceArray = ['red', 'green', 'blue', 'yellow', 'purple'];
+const sliceArray = ["red", "green", "blue", "yellow", "purple"];
 console.log("Original sliceArray: " + sliceArray);
 const slicedPart = sliceArray.slice(1, 4); // Copies elements from index 1 up to (but not including) 4
 console.log("slicedPart (from index 1 to 3): " + slicedPart); // ['green', 'blue', 'yellow']
@@ -288,9 +323,9 @@ console.log("sliceArray after slice(): " + sliceArray); // sliceArray remains un
  * Returns -1 if the element is not present.
  */
 console.log("\n--- .indexOf() ---");
-const searchArray = ['apple', 'orange', 'apple', 'banana'];
-console.log("searchArray.indexOf('apple'): " + searchArray.indexOf('apple')); // 0
-console.log("searchArray.indexOf('grape'): " + searchArray.indexOf('grape')); // -1
+const searchArray = ["apple", "orange", "apple", "banana"];
+console.log("searchArray.indexOf('apple'): " + searchArray.indexOf("apple")); // 0
+console.log("searchArray.indexOf('grape'): " + searchArray.indexOf("grape")); // -1
 
 /**
  * `.lastIndexOf()` - Does NOT mutate the array.
@@ -298,15 +333,19 @@ console.log("searchArray.indexOf('grape'): " + searchArray.indexOf('grape')); //
  * Returns -1 if the element is not present.
  */
 console.log("\n--- .lastIndexOf() ---");
-console.log("searchArray.lastIndexOf('apple'): " + searchArray.lastIndexOf('apple')); // 2
+console.log(
+  "searchArray.lastIndexOf('apple'): " + searchArray.lastIndexOf("apple"),
+); // 2
 
 /**
  * `.includes()` - Does NOT mutate the array.
  * Returns a boolean (true/false) indicating whether an array contains a certain element.
  */
 console.log("\n--- .includes() ---");
-console.log("searchArray.includes('orange'): " + searchArray.includes('orange')); // true
-console.log("searchArray.includes('kiwi'): " + searchArray.includes('kiwi'));     // false
+console.log(
+  "searchArray.includes('orange'): " + searchArray.includes("orange"),
+); // true
+console.log("searchArray.includes('kiwi'): " + searchArray.includes("kiwi")); // false
 
 /**
  * `.join()` - Does NOT mutate the array.
@@ -314,8 +353,8 @@ console.log("searchArray.includes('kiwi'): " + searchArray.includes('kiwi'));   
  * An optional separator can be specified.
  */
 console.log("\n--- .join() ---");
-const joinArray = ['alpha', 'beta', 'gamma'];
-console.log("joinArray.join('-'): " + joinArray.join('-')); // "alpha-beta-gamma"
+const joinArray = ["alpha", "beta", "gamma"];
+console.log("joinArray.join('-'): " + joinArray.join("-")); // "alpha-beta-gamma"
 console.log("joinArray after join(): " + joinArray); // joinArray remains unchanged
 
 console.log("\n--- FINAL STATE OF arrStr ---");
@@ -324,7 +363,6 @@ console.log("\n--- FINAL STATE OF arrStr ---");
 // arrStr.copyWithin(0, 3, 6); // Previous usage that affected arrStr
 // arrStr.sort(); // If it was used directly on arrStr at some point
 console.log("final arrStr[]: " + arrStr);
-
 
 // --- Section 3: Object Types, Aliases, and Interfaces ---
 
@@ -373,15 +411,15 @@ console.log(`Result: ${numbers[0] + fruits[0] + " to " + fruits[0]} `); // Outpu
  * allowing properties to be added dynamically at runtime without compiler warnings.
  */
 let personExample: any = {
-    name: "Adrian",
-    age: 2,
-    city: "Warszawa"
+  name: "Adrian",
+  age: 2,
+  city: "Warszawa",
 };
 
 let personSecondExample: any = {
-    name: "Adrian",
-    age: 22,
-    city: "Warszawa"
+  name: "Adrian",
+  age: 22,
+  city: "Warszawa",
 };
 
 // With `any` type, we can add new properties at runtime without any TypeScript warnings.
@@ -404,23 +442,23 @@ console.log("personSecondExample (with 'street' added):", personSecondExample);
  * Optional properties are marked with `?`.
  */
 interface Product {
-    id: number;
-    name: string;
-    price: number;
-    description?: string; // Optional property (may or may not be present)
+  id: number;
+  name: string;
+  price: number;
+  description?: string; // Optional property (may or may not be present)
 }
 
 let product1: Product = {
-    id: 1,
-    name: "Milk",
-    price: 2.99
+  id: 1,
+  name: "Milk",
+  price: 2.99,
 };
 
 let product2: Product = {
-    id: 2,
-    name: "Bread",
-    price: 1.99,
-    description: "Brown" // Optional property is provided
+  id: 2,
+  name: "Bread",
+  price: 1.99,
+  description: "Brown", // Optional property is provided
 };
 
 console.log("Product 1:", product1);
@@ -429,7 +467,9 @@ console.log("Product 2:", product2);
 let productArray: Product[] = [product1, product2];
 console.log("\nIterating through product array:");
 for (let i = 0; i < productArray.length; i++) {
-    console.log(`- Name: ${productArray[i].name}, Price: ${productArray[i].price}`);
+  console.log(
+    `- Name: ${productArray[i].name}, Price: ${productArray[i].price}`,
+  );
 }
 
 /**
@@ -438,15 +478,15 @@ for (let i = 0; i < productArray.length; i++) {
  * and then adding/overwriting new ones. The original object remains unchanged.
  */
 const product3: Product = {
-    id: 3,
-    name: "Chocolate",
-    price: 3.99,
-    description: "Chocolate"
+  id: 3,
+  name: "Chocolate",
+  price: 3.99,
+  description: "Chocolate",
 };
 
 const extendedProduct = {
-    ...product3, // Copies id, name, price, description from product3
-    kcal: 300    // Adds a new property 'kcal'
+  ...product3, // Copies id, name, price, description from product3
+  kcal: 300, // Adds a new property 'kcal'
 };
 console.log("\nExtended Product (extendedProduct):", extendedProduct);
 
@@ -462,7 +502,7 @@ console.log("User ID (type alias):", userID);
  * 3. Type Aliases for Union Types or Literals
  * Defines a `Status` type that can only hold one of three specified string literal values.
  */
-type Status = ("available" | "unavailable" | "ordered");
+type Status = "available" | "unavailable" | "ordered";
 let statusVar: Status = "available";
 console.log("Product Status (literal type):", statusVar);
 // statusVar = "pending"; // This line would cause a type error: "Type '"pending"' is not assignable to type 'Status'."
@@ -472,21 +512,21 @@ console.log("Product Status (literal type):", statusVar);
  * Demonstrates how one interface can extend another, inheriting its properties.
  */
 interface Person {
-    name: string;
-    surname: string;
+  name: string;
+  surname: string;
 }
 
 // `Employee` extends `Person`, adding its own specific properties.
 interface Employee extends Person {
-    position: string;
-    salary: number;
+  position: string;
+  salary: number;
 }
 
 let employee1: Employee = {
-    name: "Adam",
-    surname: "Mickiewicz",
-    position: "writer",
-    salary: 3000
+  name: "Adam",
+  surname: "Mickiewicz",
+  position: "writer",
+  salary: 3000,
 };
 
 console.log("Employee Data (interface inheritance):", employee1);
@@ -503,15 +543,17 @@ console.log("Employee Data (interface inheritance):", employee1);
  * 1. Basic Functions with Parameter and Return Value Typing
  * Defines functions with explicit types for parameters and return values.
  */
-function add(a: number, b: number): number { // Parameters `a`, `b` are `number`, function returns `number`
-    return a + b;
+function add(a: number, b: number): number {
+  // Parameters `a`, `b` are `number`, function returns `number`
+  return a + b;
 }
 console.log("Addition Result (1+2):", add(1, 2));
 // console.log(add(1, "2")); // This would cause a compile-time error:
-                           // TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+// TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 
-function welcome(name: string): string { // Parameter `name` is `string`, function returns `string`
-    return "Hello, " + name;
+function welcome(name: string): string {
+  // Parameter `name` is `string`, function returns `string`
+  return "Hello, " + name;
 }
 console.log("Greeting:", welcome("Mateusz"));
 
@@ -521,14 +563,14 @@ console.log("Greeting:", welcome("Mateusz"));
  * Includes logic to assign a default value.
  */
 function calculateTax(amount: number, taxRate?: number): number {
-    // Check if `taxRate` is null or undefined, and assign a default if so.
-    // An alternative is using the nullish coalescing operator `??` for conciseness:
-    // const actualTaxRate = taxRate ?? 0.23;
-    // return amount * actualTaxRate;
-    if (taxRate === null || taxRate === undefined) {
-        taxRate = 0.23;
-    }
-    return amount * taxRate;
+  // Check if `taxRate` is null or undefined, and assign a default if so.
+  // An alternative is using the nullish coalescing operator `??` for conciseness:
+  // const actualTaxRate = taxRate ?? 0.23;
+  // return amount * actualTaxRate;
+  if (taxRate === null || taxRate === undefined) {
+    taxRate = 0.23;
+  }
+  return amount * taxRate;
 }
 console.log("Tax on 100 (rate 0.1):", calculateTax(100, 0.1));
 console.log("Tax on 100 (default rate):", calculateTax(100));
@@ -538,7 +580,7 @@ console.log("Tax on 100 (default rate):", calculateTax(100));
  * A function returning `void` indicates that it does not return any meaningful value.
  */
 function logMsg(msg: string): void {
-    console.log("Message to log:", msg);
+  console.log("Message to log:", msg);
 }
 
 logMsg("Hello");
@@ -566,7 +608,7 @@ console.log("User ID (number):", userId);
  * Function accepting a union type parameter.
  */
 function showInfo(data: string | number | boolean) {
-    console.log("Displayed Information:", data);
+  console.log("Displayed Information:", data);
 }
 showInfo("Cat has a cat"); // Assuming "Ala ma kota" translated
 showInfo(42);
@@ -578,14 +620,14 @@ showInfo(true);
  * `Loggable` requires any implementing object to have a `log` method.
  */
 interface Loggable {
-    log(msg: string): void;
+  log(msg: string): void;
 }
 
 // An object implementing the `Loggable` interface.
 const myLogger: Loggable = {
-    log: (message: string) => {
-        console.log("Custom Logger:", message);
-    }
+  log: (message: string) => {
+    console.log("Custom Logger:", message);
+  },
 };
 myLogger.log("This is a message from the custom logger.");
 
@@ -605,7 +647,7 @@ myLogger.log("This is a message from the custom logger.");
  * Requires the implementation of the `draw()` method.
  */
 interface Drawable {
-    draw(): void;
+  draw(): void;
 }
 
 // --- Abstract and Base Class Definitions ---
@@ -618,36 +660,34 @@ interface Drawable {
  * An abstract class cannot be instantiated directly (cannot create an object from it).
  */
 abstract class Shape {
-    /**
-     * @param name - The name of the shape. It's a `protected` property,
-     * meaning it's accessible within this class and its derived classes.
-     * By using 'protected' in the constructor parameter, TypeScript
-     * automatically creates and initializes the `name` property.
-     * Has a default value of "Shape" if not provided.
-     */
-    constructor(
-        protected name: string = "Shape"
-    ) {
-        // Constructor body for the base class. Additional common initialization
-        // logic for all shapes could be added here.
-    }
+  /**
+   * @param name - The name of the shape. It's a `protected` property,
+   * meaning it's accessible within this class and its derived classes.
+   * By using 'protected' in the constructor parameter, TypeScript
+   * automatically creates and initializes the `name` property.
+   * Has a default value of "Shape" if not provided.
+   */
+  constructor(protected name: string = "Shape") {
+    // Constructor body for the base class. Additional common initialization
+    // logic for all shapes could be added here.
+  }
 
-    /**
-     * @abstract calcArea()
-     * An abstract method that *must* be implemented by every inheriting class.
-     * Responsible for calculating the area of the shape.
-     * @returns {number} The area of the shape.
-     */
-    abstract calcArea(): number;
+  /**
+   * @abstract calcArea()
+   * An abstract method that *must* be implemented by every inheriting class.
+   * Responsible for calculating the area of the shape.
+   * @returns {number} The area of the shape.
+   */
+  abstract calcArea(): number;
 
-    /**
-     * @method getName()
-     * Returns the name of the shape.
-     * @returns {string} The name of the shape.
-     */
-    getName(): string {
-        return this.name;
-    }
+  /**
+   * @method getName()
+   * Returns the name of the shape.
+   * @returns {string} The name of the shape.
+   */
+  getName(): string {
+    return this.name;
+  }
 }
 
 // --- Concrete Shape Class Definitions ---
@@ -657,65 +697,65 @@ abstract class Shape {
  * Represents a square, inheriting from `Shape` and implementing `Drawable`.
  */
 class Square extends Shape implements Drawable {
-    /**
-     * @param name - The name of the square, passed to the base class `Shape` constructor.
-     * @param side - The length of the square's side. This is a `private` property,
-     * automatically created and initialized by TypeScript
-     * due to the 'private' modifier in the constructor parameter.
-     * Has a default value of 0 if not provided.
-     */
-    constructor(
-        name: string,
-        private side: number = 0
-    ) {
-        super(name); // Call the base class `Shape` constructor
-        // No need for 'this.side = side;' - handled by 'private side' in parameter
-    }
+  /**
+   * @param name - The name of the square, passed to the base class `Shape` constructor.
+   * @param side - The length of the square's side. This is a `private` property,
+   * automatically created and initialized by TypeScript
+   * due to the 'private' modifier in the constructor parameter.
+   * Has a default value of 0 if not provided.
+   */
+  constructor(
+    name: string,
+    private side: number = 0,
+  ) {
+    super(name); // Call the base class `Shape` constructor
+    // No need for 'this.side = side;' - handled by 'private side' in parameter
+  }
 
-    /**
-     * @method calcArea()
-     * Implementation of the abstract method from the `Shape` base class.
-     * Calculates the area of the square.
-     * @returns {number} The area of the square.
-     */
-    calcArea(): number {
-        return this.side * this.side;
-    }
+  /**
+   * @method calcArea()
+   * Implementation of the abstract method from the `Shape` base class.
+   * Calculates the area of the square.
+   * @returns {number} The area of the square.
+   */
+  calcArea(): number {
+    return this.side * this.side;
+  }
 
-    /**
-     * @method draw()
-     * Implementation of the method from the `Drawable` interface.
-     * Simulates drawing a square.
-     */
-    draw(): void {
-        console.log("Drawing a square.");
-    }
+  /**
+   * @method draw()
+   * Implementation of the method from the `Drawable` interface.
+   * Simulates drawing a square.
+   */
+  draw(): void {
+    console.log("Drawing a square.");
+  }
 
-    /**
-     * @method getSide()
-     * Public "getter" for the private `side` property.
-     * Allows safe reading of the square's side length from outside the class.
-     * @returns {number} The length of the square's side.
-     */
-    getSide(): number {
-        return this.side;
-    }
+  /**
+   * @method getSide()
+   * Public "getter" for the private `side` property.
+   * Allows safe reading of the square's side length from outside the class.
+   * @returns {number} The length of the square's side.
+   */
+  getSide(): number {
+    return this.side;
+  }
 
-    /**
-     * @method setSide()
-     * Public "setter" for the private `side` property.
-     * Allows safe modification of the square's side length from outside the class.
-     * Validation logic can be added here, e.g., to prevent setting a negative value.
-     * @param side - The new side length.
-     */
-    setSide(side: number): void {
-        // Example validation:
-        if (side < 0) {
-            console.warn("Side length cannot be negative. Value not changed.");
-            return;
-        }
-        this.side = side;
+  /**
+   * @method setSide()
+   * Public "setter" for the private `side` property.
+   * Allows safe modification of the square's side length from outside the class.
+   * Validation logic can be added here, e.g., to prevent setting a negative value.
+   * @param side - The new side length.
+   */
+  setSide(side: number): void {
+    // Example validation:
+    if (side < 0) {
+      console.warn("Side length cannot be negative. Value not changed.");
+      return;
     }
+    this.side = side;
+  }
 }
 
 /**
@@ -723,59 +763,59 @@ class Square extends Shape implements Drawable {
  * Represents a circle, inheriting from `Shape` and implementing `Drawable`.
  */
 class Circle extends Shape implements Drawable {
-    /**
-     * @param name - The name of the circle, passed to the base class `Shape` constructor.
-     * @param radius - The length of the circle's radius. A private property, automatically
-     * created and initialized. Default value is 0.
-     */
-    constructor(
-        name: string,
-        private radius: number = 0
-    ) {
-        super(name); // Call the base class `Shape` constructor
-    }
+  /**
+   * @param name - The name of the circle, passed to the base class `Shape` constructor.
+   * @param radius - The length of the circle's radius. A private property, automatically
+   * created and initialized. Default value is 0.
+   */
+  constructor(
+    name: string,
+    private radius: number = 0,
+  ) {
+    super(name); // Call the base class `Shape` constructor
+  }
 
-    /**
-     * @method calcArea()
-     * Implementation of the abstract method from the `Shape` base class.
-     * Calculates the area of the circle.
-     * @returns {number} The area of the circle.
-     */
-    calcArea(): number {
-        return Math.PI * this.radius * this.radius;
-    }
+  /**
+   * @method calcArea()
+   * Implementation of the abstract method from the `Shape` base class.
+   * Calculates the area of the circle.
+   * @returns {number} The area of the circle.
+   */
+  calcArea(): number {
+    return Math.PI * this.radius * this.radius;
+  }
 
-    /**
-     * @method draw()
-     * Implementation of the method from the `Drawable` interface.
-     * Simulates drawing a circle.
-     */
-    draw(): void {
-        console.log("Drawing a circle.");
-    }
+  /**
+   * @method draw()
+   * Implementation of the method from the `Drawable` interface.
+   * Simulates drawing a circle.
+   */
+  draw(): void {
+    console.log("Drawing a circle.");
+  }
 
-    /**
-     * @method getRadius()
-     * Public "getter" for the private `radius` property.
-     * @returns {number} The length of the circle's radius.
-     */
-    getRadius(): number {
-        return this.radius;
-    }
+  /**
+   * @method getRadius()
+   * Public "getter" for the private `radius` property.
+   * @returns {number} The length of the circle's radius.
+   */
+  getRadius(): number {
+    return this.radius;
+  }
 
-    /**
-     * @method setRadius()
-     * Public "setter" for the private `radius` property.
-     * @param radius - The new radius length.
-     */
-    setRadius(radius: number): void {
-        // Example validation:
-        if (radius < 0) {
-            console.warn("Radius cannot be negative. Value not changed.");
-            return;
-        }
-        this.radius = radius;
+  /**
+   * @method setRadius()
+   * Public "setter" for the private `radius` property.
+   * @param radius - The new radius length.
+   */
+  setRadius(radius: number): void {
+    // Example validation:
+    if (radius < 0) {
+      console.warn("Radius cannot be negative. Value not changed.");
+      return;
     }
+    this.radius = radius;
+  }
 }
 
 // --- Example Usage of Classes ---
@@ -783,16 +823,24 @@ class Circle extends Shape implements Drawable {
 console.log("--- Creating and Testing Individual Objects ---");
 
 const square = new Square("Square 5x5", 5);
-console.log(`${square.getName()} | Area: ${square.calcArea().toFixed(2)} | Side: ${square.getSide()}`);
+console.log(
+  `${square.getName()} | Area: ${square.calcArea().toFixed(2)} | Side: ${square.getSide()}`,
+);
 
 const circle = new Circle("Circle R=3", 3);
-console.log(`${circle.getName()} | Area: ${circle.calcArea().toFixed(2)} | Radius: ${circle.getRadius()}`);
+console.log(
+  `${circle.getName()} | Area: ${circle.calcArea().toFixed(2)} | Radius: ${circle.getRadius()}`,
+);
 
 console.log("\n--- Modifying Values via Setters ---");
 square.setSide(7);
-console.log(`${square.getName()} (after side change) | Area: ${square.calcArea().toFixed(2)} | New Side: ${square.getSide()}`);
+console.log(
+  `${square.getName()} (after side change) | Area: ${square.calcArea().toFixed(2)} | New Side: ${square.getSide()}`,
+);
 circle.setRadius(-1); // Attempt to set an invalid value
-console.log(`${circle.getName()} (after attempt to change radius to -1) | Radius: ${circle.getRadius()}`); // Radius should not change
+console.log(
+  `${circle.getName()} (after attempt to change radius to -1) | Radius: ${circle.getRadius()}`,
+); // Radius should not change
 
 console.log("\n--- Using Polymorphism with an Array ---");
 
@@ -803,26 +851,24 @@ arrShapes.push(circle);
 arrShapes.push(new Square("Small Square", 2));
 arrShapes.push(new Circle("Large Circle", 7));
 
-
 for (const shape of arrShapes) {
-    // We can call methods from both `Shape` and `Drawable` interfaces.
-    console.log(`\n--- Information about ${shape.getName()} ---`);
-    shape.draw(); // Method from `Drawable` interface
-    console.log(`Area: ${shape.calcArea().toFixed(2)}`); // Method from `Shape` base class
+  // We can call methods from both `Shape` and `Drawable` interfaces.
+  console.log(`\n--- Information about ${shape.getName()} ---`);
+  shape.draw(); // Method from `Drawable` interface
+  console.log(`Area: ${shape.calcArea().toFixed(2)}`); // Method from `Shape` base class
 
-    // If we need specific methods (like getSide() / getRadius()),
-    // we must check the object's type using `instanceof`.
-    if (shape instanceof Square) {
-        console.log(`Side Length (specific to Square): ${shape.getSide()}`);
-    } else if (shape instanceof Circle) {
-        console.log(`Radius Length (specific to Circle): ${shape.getRadius()}`);
-    }
+  // If we need specific methods (like getSide() / getRadius()),
+  // we must check the object's type using `instanceof`.
+  if (shape instanceof Square) {
+    console.log(`Side Length (specific to Square): ${shape.getSide()}`);
+  } else if (shape instanceof Circle) {
+    console.log(`Radius Length (specific to Circle): ${shape.getRadius()}`);
+  }
 }
 
 // --- Attempting to Instantiate an Abstract Class (Shows Compile-time Error) ---
 // const shapeExample: Shape = new Shape("General Shape");
 // The line above would cause a TS2511 error: Cannot create an instance of an abstract class.
-
 
 /**
  * @function maxAdjacentDistance
@@ -846,28 +892,30 @@ for (const shape of arrShapes) {
  * // Explanation: The maximum absolute difference is between nums[0] and nums[1]: |-5 - (-10)| = 5.
  */
 function maxAdjacentDistance(nums: number[]): number {
-    // Input validation checks for array length and element value range.
-    if (
-        nums.length < 2 ||   // Array must have at least 2 elements
-        nums.length > 100 || // Array length must not exceed 100
-        nums.some(i => i > 100 || i < -100) // All elements must be between -100 and 100 (inclusive)
-    ) {
-        console.log(`Incorrect input data. Constraints: length >= 2, length <= 100, -100 <= element <= 100.`);
-        return 0; // Return 0 for invalid input as per problem statement or a specific error handling
-    }
+  // Input validation checks for array length and element value range.
+  if (
+    nums.length < 2 || // Array must have at least 2 elements
+    nums.length > 100 || // Array length must not exceed 100
+    nums.some((i) => i > 100 || i < -100) // All elements must be between -100 and 100 (inclusive)
+  ) {
+    console.log(
+      `Incorrect input data. Constraints: length >= 2, length <= 100, -100 <= element <= 100.`,
+    );
+    return 0; // Return 0 for invalid input as per problem statement or a specific error handling
+  }
 
-    // Initialize `maxAbsoluteDiff` with the difference between the first and last elements
-    // because it's a circular array.
-    let maxAbsoluteDiff = Math.abs(nums[0] - nums[nums.length - 1]);
+  // Initialize `maxAbsoluteDiff` with the difference between the first and last elements
+  // because it's a circular array.
+  let maxAbsoluteDiff = Math.abs(nums[0] - nums[nums.length - 1]);
 
-    // Iterate through adjacent elements to find the maximum difference
-    for (let i = 0; i < nums.length - 1; i++) {
-        const currentCompare = Math.abs(nums[i] - nums[i + 1]);
-        if (currentCompare > maxAbsoluteDiff) {
-            maxAbsoluteDiff = currentCompare;
-        }
+  // Iterate through adjacent elements to find the maximum difference
+  for (let i = 0; i < nums.length - 1; i++) {
+    const currentCompare = Math.abs(nums[i] - nums[i + 1]);
+    if (currentCompare > maxAbsoluteDiff) {
+      maxAbsoluteDiff = currentCompare;
     }
-    return maxAbsoluteDiff;
+  }
+  return maxAbsoluteDiff;
 }
 
 // --- Moved from another file (commented out as per original) ---
@@ -905,7 +953,6 @@ function maxAdjacentDistance(nums: number[]): number {
 //     // }
 // }
 
-
 function multiply(a: number, b: number): number {
   return a * b;
 }
@@ -928,7 +975,7 @@ async function runMultiplications() {
  * @returns {Promise<void>} A promise that resolves after the given delay.
  */
 function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -950,8 +997,6 @@ async function runWithTiming() {
 // Run:
 // runWithTiming();
 
-
-
 /**
  * Finds two elements in an array that sum up to the given target.
  * Returns an array with the indices of the two elements or an empty array if no such pair is found.
@@ -961,18 +1006,17 @@ async function runWithTiming() {
  * @returns An array with two indices or an empty array.
  */
 function twoSum(nums: number[], target: number): number[] {
-    for(let i=0, j=1; i<nums.length-1; i++, j=i+1)
-    {
-        for(; j<nums.length; j++){
-            if ((nums[i] + nums[j]) === target){
-                return [i, j];
-            }
-        }
+  for (let i = 0, j = 1; i < nums.length - 1; i++, j = i + 1) {
+    for (; j < nums.length; j++) {
+      if (nums[i] + nums[j] === target) {
+        return [i, j];
+      }
     }
-    return [];
-};
+  }
+  return [];
+}
 
-const result = twoSum([2,7,11,14], 25);
+const result = twoSum([2, 7, 11, 14], 25);
 console.log(result);
 
 /**
@@ -984,17 +1028,18 @@ console.log(result);
  * @returns An array with two indices or an empty array.
  */
 function twoSumV2(nums: number[], target: number): number[] {
-    if (!nums || nums.length < 2) { // Dodatkowe sprawdzenie
-        return [];
-    }
-
-    const map = new Map<number, number>();
-    for (let i = 0; i < nums.length; i++) {
-        const complement = target - nums[i];
-        if (map.has(complement)) {
-            return [map.get(complement)!, i];
-        }
-        map.set(nums[i], i);
-    }
+  if (!nums || nums.length < 2) {
+    // Dodatkowe sprawdzenie
     return [];
-};
+  }
+
+  const map = new Map<number, number>();
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+    if (map.has(complement)) {
+      return [map.get(complement)!, i];
+    }
+    map.set(nums[i], i);
+  }
+  return [];
+}

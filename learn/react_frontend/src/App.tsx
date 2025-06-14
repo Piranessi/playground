@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
 
 /**
  * App Component
@@ -10,8 +10,8 @@ import './App.css';
 function App() {
   // --- State Declarations ---
   // Numeric counter for general demonstration
-  const [count, setCount] = useState<number>(() =>{
-    const storedCount = localStorage.getItem('count');
+  const [count, setCount] = useState<number>(() => {
+    const storedCount = localStorage.getItem("count");
     return storedCount ? parseInt(storedCount, 10) : 0;
   });
   // String state, modified by appending a dot on click
@@ -24,7 +24,7 @@ function App() {
   const [isButtonActive, setIsButtonActive] = useState(false);
   // Numeric state for demonstrating useEffect dependencies
   const [effectCounter, setEffectCounter] = useState(0);
-  // Boolean state for conditional CSS styling  
+  // Boolean state for conditional CSS styling
   const [isButtonActive2, setIsButtonActive2] = useState(false);
 
   // --- Effects ---
@@ -41,7 +41,9 @@ function App() {
    * Runs whenever the `effectCounter` variable is updated.
    */
   useEffect(() => {
-    console.log(`[log from useEffect] EffectCounter changed to: ${effectCounter}`);
+    console.log(
+      `[log from useEffect] EffectCounter changed to: ${effectCounter}`,
+    );
   }, [effectCounter]);
 
   /**
@@ -49,7 +51,9 @@ function App() {
    * Runs whenever the `isButtonActive2` variable is updated.
    */
   useEffect(() => {
-    console.log(`[log from useEffect] isButtonActive2 changed to: ${isButtonActive2}`);
+    console.log(
+      `[log from useEffect] isButtonActive2 changed to: ${isButtonActive2}`,
+    );
   }, [isButtonActive2]);
 
   /**
@@ -57,13 +61,12 @@ function App() {
    * Runs once on component mount.
    */
   useEffect(() => {
-    const savedCounter = localStorage.getItem('count');
+    const savedCounter = localStorage.getItem("count");
     console.log("🔄 Odczyt z localStorage przy starcie:", savedCounter);
     if (savedCounter !== null) {
       setCount(parseInt(savedCounter));
     }
   }, []);
-
 
   /**
    * Effect hook to save the `count` state to localStorage.
@@ -71,7 +74,7 @@ function App() {
    */
   useEffect(() => {
     console.log("Zapisuję count do localStorage:", count);
-    localStorage.setItem('count', count.toString());
+    localStorage.setItem("count", count.toString());
   }, [count]);
 
   // --- Event Handlers ---
@@ -85,7 +88,9 @@ function App() {
     // Calculate the new value first to ensure the log reflects it immediately
     const newCounterValue = counter + 1;
     setCounter(newCounterValue);
-    console.log(`[log from handleCounterClick] Counter (after click): ${newCounterValue}`);
+    console.log(
+      `[log from handleCounterClick] Counter (after click): ${newCounterValue}`,
+    );
   };
 
   /**
@@ -94,8 +99,10 @@ function App() {
    * demonstrating the asynchronous nature of setState.
    */
   const handleToggleButtonClick = () => {
-    setIsButtonActive(prevIsActive => !prevIsActive);
-    console.log(`[log from handleToggleButtonClick] isButtonActive (before next render): ${isButtonActive}`); // This will log the old value
+    setIsButtonActive((prevIsActive) => !prevIsActive);
+    console.log(
+      `[log from handleToggleButtonClick] isButtonActive (before next render): ${isButtonActive}`,
+    ); // This will log the old value
   };
 
   /**
@@ -105,7 +112,9 @@ function App() {
   const handleEffectCounterClick = () => {
     const newEffectCounterValue = effectCounter + 1;
     setEffectCounter(newEffectCounterValue);
-    console.log(`[log from handleEffectCounterClick] EffectCounter (from button click): ${newEffectCounterValue}`);
+    console.log(
+      `[log from handleEffectCounterClick] EffectCounter (from button click): ${newEffectCounterValue}`,
+    );
   };
 
   // --- Render Method ---
@@ -113,24 +122,22 @@ function App() {
     <>
       <div className="card">
         {/* Button: Increment Count */}
-        <button onClick={() => setCount(prevCount => prevCount + 1)}>
+        <button onClick={() => setCount((prevCount) => prevCount + 1)}>
           Count is {count}
         </button>
 
         {/* Button: Append to Name */}
-        <button onClick={() => setName(prevName => prevName + '.')}>
+        <button onClick={() => setName((prevName) => prevName + ".")}>
           {name}
         </button>
 
         {/* Button: Toggle Boolean Variable */}
-        <button onClick={() => setBoolVar(prevBool => !prevBool)}>
+        <button onClick={() => setBoolVar((prevBool) => !prevBool)}>
           {String(boolVar)}
         </button>
 
         {/* Button: Increment Counter with Direct Log of New Value */}
-        <button onClick={handleCounterClick}>
-          {counter}
-        </button>
+        <button onClick={handleCounterClick}>{counter}</button>
 
         {/* Button: Toggle Boolean for CSS Styling */}
         <button
@@ -141,20 +148,16 @@ function App() {
         </button>
 
         {/* Button: Increment Effect Counter */}
-        <button
-          onClick={handleEffectCounterClick}
-          id='effectCounterBtn'
-        >
+        <button onClick={handleEffectCounterClick} id="effectCounterBtn">
           {effectCounter}
         </button>
 
         <button
-          onClick={() => setIsButtonActive2(prevIsActive => !prevIsActive)}
+          onClick={() => setIsButtonActive2((prevIsActive) => !prevIsActive)}
           className={isButtonActive2 ? "btn-on" : "btn-off"}
         >
           {String(isButtonActive2)}
         </button>
-
       </div>
     </>
   );
