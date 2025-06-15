@@ -1070,37 +1070,35 @@ function minMaxDifference(num: number): number {
   return parseInt(max) - parseInt(min);
 }
 
-
-
 /**
  * Calculates the difference between the maximum and minimum possible numbers that can be obtained by changing the digits of the given number.
  * @param num - The input number.
  * @returns {number} The difference between the maximum and minimum possible numbers.
  */
 function maxDiff(num: number): number {
-    const strNum = num.toString();
+  const strNum = num.toString();
 
-    // Maksymalizacja — zamień pierwszą nie-9 cyfrę na 9
-    let a = strNum;
-    for (let ch of strNum) {
-        if (ch !== '9') {
-            a = strNum.split(ch).join('9');
-            break;
-        }
+  // Maksymalizacja — zamień pierwszą nie-9 cyfrę na 9
+  let a = strNum;
+  for (let ch of strNum) {
+    if (ch !== "9") {
+      a = strNum.split(ch).join("9");
+      break;
     }
+  }
 
-    // Minimalizacja — zamień pierwszą cyfrę na 1 lub inne cyfry na 0
-    let b = strNum;
-    if (strNum[0] !== '1') {
-        b = strNum.split(strNum[0]).join('1');
-    } else {
-        for (let i = 1; i < strNum.length; i++) {
-            if (strNum[i] !== '0' && strNum[i] !== '1') {
-                b = strNum.split(strNum[i]).join('0');
-                break;
-            }
-        }
+  // Minimalizacja — zamień pierwszą cyfrę na 1 lub inne cyfry na 0
+  let b = strNum;
+  if (strNum[0] !== "1") {
+    b = strNum.split(strNum[0]).join("1");
+  } else {
+    for (let i = 1; i < strNum.length; i++) {
+      if (strNum[i] !== "0" && strNum[i] !== "1") {
+        b = strNum.split(strNum[i]).join("0");
+        break;
+      }
     }
+  }
 
-    return parseInt(a) - parseInt(b);
+  return parseInt(a) - parseInt(b);
 }
