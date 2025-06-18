@@ -1078,7 +1078,6 @@ function minMaxDifference(num: number): number {
 function maxDiff(num: number): number {
   const strNum = num.toString();
 
-  // Maksymalizacja — zamień pierwszą nie-9 cyfrę na 9
   let a = strNum;
   for (let ch of strNum) {
     if (ch !== "9") {
@@ -1087,7 +1086,6 @@ function maxDiff(num: number): number {
     }
   }
 
-  // Minimalizacja — zamień pierwszą cyfrę na 1 lub inne cyfry na 0
   let b = strNum;
   if (strNum[0] !== "1") {
     b = strNum.split(strNum[0]).join("1");
@@ -1101,4 +1099,32 @@ function maxDiff(num: number): number {
   }
 
   return parseInt(a) - parseInt(b);
+}
+
+
+
+/**
+ * Divides an array of numbers into groups of 3, such that the difference
+ * between the maximum and minimum elements in each group is at most k.
+ * @param nums - The input array of numbers.
+ * @param k - The maximum difference between the maximum and minimum elements in each group.
+ * @returns {number[][]} The divided groups of 3 numbers, or an empty array if no solution is possible.
+ */
+function divideArray(nums: number[], k: number): number[][] {
+    const n = nums.length;
+    if (n % 3 !== 0) return [];
+
+    nums.sort((a, b) => a - b);
+    const result: number[][] = [];
+
+    for (let i = 0; i < n; i += 3) {
+        const group = [nums[i], nums[i + 1], nums[i + 2]];
+        if (group[2] - group[0] > k) {
+            // If difference is more than k, no solution
+            return [];
+        }
+        result.push(group);
+    }
+
+    return result;
 }
