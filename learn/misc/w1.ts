@@ -1101,8 +1101,6 @@ function maxDiff(num: number): number {
   return parseInt(a) - parseInt(b);
 }
 
-
-
 /**
  * Divides an array of numbers into groups of 3, such that the difference
  * between the maximum and minimum elements in each group is at most k.
@@ -1111,20 +1109,20 @@ function maxDiff(num: number): number {
  * @returns {number[][]} The divided groups of 3 numbers, or an empty array if no solution is possible.
  */
 function divideArray(nums: number[], k: number): number[][] {
-    const n = nums.length;
-    if (n % 3 !== 0) return [];
+  const n = nums.length;
+  if (n % 3 !== 0) return [];
 
-    nums.sort((a, b) => a - b);
-    const result: number[][] = [];
+  nums.sort((a, b) => a - b);
+  const result: number[][] = [];
 
-    for (let i = 0; i < n; i += 3) {
-        const group = [nums[i], nums[i + 1], nums[i + 2]];
-        if (group[2] - group[0] > k) {
-            // If difference is more than k, no solution
-            return [];
-        }
-        result.push(group);
+  for (let i = 0; i < n; i += 3) {
+    const group = [nums[i], nums[i + 1], nums[i + 2]];
+    if (group[2] - group[0] > k) {
+      // If difference is more than k, no solution
+      return [];
     }
+    result.push(group);
+  }
 
-    return result;
+  return result;
 }
