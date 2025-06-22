@@ -1,4 +1,5 @@
 # PathExist
+
 Provide size of a square matrix, starting point (0 < point <= size) and the sought point (0 < point <=size)
 
 Provide a square matrix of zeros and ones.

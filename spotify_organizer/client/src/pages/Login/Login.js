@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useAuth } from '../../components/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useAuth } from "../../components/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function SpotifyAuthorization() {
   const { isLoggedIn, login } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [authorizeURL, setAuthorizeURL] = useState('');
+  const [authorizeURL, setAuthorizeURL] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,16 +14,19 @@ function SpotifyAuthorization() {
 
     const checkSpotifyLoginStatus = async () => {
       try {
-        const response = await axios.get('http://spotifyorganizer.matgosoft.com/check-login', {
-          cancelToken: source.token,
-        });
+        const response = await axios.get(
+          "http://spotifyorganizer.matgosoft.com/check-login",
+          {
+            cancelToken: source.token,
+          },
+        );
         const userIsLoggedIn = response.data.isLoggedIn;
         if (userIsLoggedIn) {
           login(); // Update the context if the user is logged in
         }
       } catch (error) {
         if (!axios.isCancel(error)) {
-          console.error('Error checking login status:', error.message);
+          console.error("Error checking login status:", error.message);
           // Handle other errors if needed
         }
       } finally {
@@ -35,7 +38,7 @@ function SpotifyAuthorization() {
 
     // Clean up the effect if unmounting
     return () => {
-      source.cancel('Request canceled: Component unmounted');
+      source.cancel("Request canceled: Component unmounted");
     };
   }, [login]); // 'login' added to the dependency array
 
@@ -48,10 +51,15 @@ function SpotifyAuthorization() {
     // Fetch the Spotify authorization URL
     const fetchSpotifyAuthURL = async () => {
       try {
-        const response = await axios.get('http://spotifyorganizer.matgosoft.com/login');
+        const response = await axios.get(
+          "http://spotifyorganizer.matgosoft.com/login",
+        );
         setAuthorizeURL(response.data.authorizeURL);
       } catch (error) {
-        console.error('Error fetching Spotify authorization URL:', error.message);
+        console.error(
+          "Error fetching Spotify authorization URL:",
+          error.message,
+        );
         // Handle errors if needed
       }
     };
@@ -62,7 +70,7 @@ function SpotifyAuthorization() {
   useEffect(() => {
     // Check for a callback from Spotify
     const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
+    const code = urlParams.get("code");
 
     if (code) {
       // Handle the Spotify callback logic here
@@ -74,7 +82,9 @@ function SpotifyAuthorization() {
     console.log("handleSpotifyCallback 0");
     try {
       // Make a request to your backend to exchange the code for an access token
-      const response = await axios.get(`http://spotifyorganizer.matgosoft.com/callback?code=${code}`);
+      const response = await axios.get(
+        `http://spotifyorganizer.matgosoft.com/callback?code=${code}`,
+      );
       console.log("handleSpotifyCallback response: ", response);
       // Assuming your backend sends a success response upon successful authentication
       if (response.data.success) {
@@ -84,13 +94,13 @@ function SpotifyAuthorization() {
         console.log("handleSpotifyCallback after login");
         // Navigate the user back to the original login route
         console.log("handleSpotifyCallback before navigate/login");
-        navigate('/login');
+        navigate("/login");
         console.log("handleSpotifyCallback after navigate/login");
       } else {
         // Handle authentication failure
       }
     } catch (error) {
-      console.error('Error handling Spotify callback:', error.message);
+      console.error("Error handling Spotify callback:", error.message);
       // Handle errors if needed
     }
   };

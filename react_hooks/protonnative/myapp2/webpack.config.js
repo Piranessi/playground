@@ -10,11 +10,11 @@ module.exports = (env, argv) => {
     target: "node",
     output: {
       path: path.resolve(__dirname, "dist"),
-      filename: "index.out.js"
+      filename: "index.out.js",
     },
     node: {
       __dirname: false,
-      __filename: false
+      __filename: false,
     },
     module: {
       rules: [
@@ -23,52 +23,55 @@ module.exports = (env, argv) => {
           exclude: /node_modules/,
           use: {
             loader: "babel-loader",
-            options: { cacheDirectory: true, cacheCompression: false }
-          }
+            options: { cacheDirectory: true, cacheCompression: false },
+          },
         },
         {
           test: /\.(png|jpe?g|gif|svg|bmp)$/i,
-          use: [{ loader: "file-loader" }]
+          use: [{ loader: "file-loader" }],
         },
         {
           test: /\.node/i,
-          use: [{ loader: "node-loader" }, { loader: "file-loader" }]
-        }
-      ]
+          use: [{ loader: "node-loader" }, { loader: "file-loader" }],
+        },
+      ],
     },
     plugins: [
       {
-        apply: compiler => {
+        apply: (compiler) => {
           let instance = null;
-          compiler.hooks.afterEmit.tap("AfterEmitPlugin", compilation => {
+          compiler.hooks.afterEmit.tap("AfterEmitPlugin", (compilation) => {
             if (instance) {
               return;
             }
-            instance = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ["run", "webpackRun"]);
-            instance.stdout.on("data", function(data) {
+            instance = spawn(
+              /^win/.test(process.platform) ? "npm.cmd" : "npm",
+              ["run", "webpackRun"],
+            );
+            instance.stdout.on("data", function (data) {
               console.log(data.toString());
             });
 
-            instance.stderr.on("data", function(data) {
+            instance.stderr.on("data", function (data) {
               console.log(data.toString());
             });
 
-            instance.on("exit", function(code) {
+            instance.on("exit", function (code) {
               console.log("child process exited with code " + code.toString());
               process.exit(code);
             });
           });
-        }
-      }
+        },
+      },
     ],
     resolve: {
-      extensions: [".tsx", ".ts", ".js", ".jsx", ".json"]
+      extensions: [".tsx", ".ts", ".js", ".jsx", ".json"],
     },
     externals: [
       nodeExternals({
-        whitelist: ["webpack/hot/dev-server", "webpack/hot/poll?100"]
-      })
-    ]
+        whitelist: ["webpack/hot/dev-server", "webpack/hot/poll?100"],
+      }),
+    ],
   };
 
   if (argv.mode === "development") {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import Headphones from "../../assets/headphones.jpg";
 import "./About.css";
 

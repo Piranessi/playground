@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Canvas Paddle Example</title>
+  </head>
+  <body>
+    <canvas
+      id="canvas"
+      width="1000"
+      height="600"
+      style="border: 1px solid #0e0d0d"
+      >canvas</canvas
+    >
+    <script>
+      function drawBall(ball, ctx, color = "black") {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+      function drawPaddle(paddle, ctx, color = "black") {
+        ctx.fillStyle = color;
+        ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+      }
+
+      function drawText(
+        text,
+        ctx,
+        textColor = "black",
+        fontSize = "30px",
+        fontFamily = "Arial",
+        x = 10,
+        y = 100,
+      ) {
+        ctx.font = fontSize + " " + fontFamily;
+        ctx.fillStyle = textColor;
+        ctx.fillText(text, x, y);
+      }
+
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const paddleConfig = {
+        width: 20,
+        height: 100,
+        margin: 10,
+      };
+
+      const paddle1 = {
+        x: paddleConfig.margin,
+        y: (canvas.height - paddleConfig.height) / 2,
+        width: paddleConfig.width,
+        height: paddleConfig.height,
+        heightRatio: 1,
+      };
+
+      const paddle2 = {
+        x: canvas.width - paddleConfig.width - paddleConfig.margin,
+        y: (canvas.height - paddleConfig.height) / 2,
+        width: paddleConfig.width,
+        height: paddleConfig.height,
+        heightRatio: 1,
+      };
+
+      const ball = {
+        x: canvas.width / 2,
+        y: canvas.height / 2,
+        radius: 20,
+      };
+
+      drawText("Hello World", ctx, "red", "40px", "Arial", 10, 200);
+
+      ctx.fillStyle = "black";
+      drawPaddle(paddle1, ctx);
+      drawPaddle(paddle2, ctx, "purple");
+    </script>
+  </body>
+</html>
