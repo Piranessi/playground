@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { Button, StyleSheet, Text, View, Switch } from "react-native";
 import { Amplify, PubSub, Auth } from "aws-amplify";
 import { AWSIoTProvider } from "@aws-amplify/pubsub";
-import awsexport from "./exp/aws-export";
+import awsexport from "./aws/aws-export";
 import { useState } from "react";
 
 interface MQTTData {
