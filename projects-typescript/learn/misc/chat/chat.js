@@ -1,49 +1,40 @@
-//#App.js - react
-
-import React, { useContext } from 'react';
-import './App.css';
-import Navbar from './components/Navbar/Navbar.js';
-import Home from './pages/Home/Home.js';
-import About from './pages/About/About.js';
-import Contact from './pages/Contact/Contact.js';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import Footer from './components/Footer.js';
-import Login from './pages/Login.js';
-import { HelloContext } from './components/HelloContext.js';
+// Deprecated
+// --- React part ---
+import React, { useContext, useEffect, useState } from "react";
+import "./App.css";
+import Navbar from "./components/Navbar/Navbar.js";
+import Home from "./pages/Home/Home.js";
+import About from "./pages/About/About.js";
+import Contact from "./pages/Contact/Contact.js";
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import Footer from "./components/Footer.js";
+import { HelloContext } from "./components/HelloContext.js";
+import axios from "axios";
+import { useAuth } from "./components/AuthContext";
 
 function App() {
-  // eslint-disable-next-line
-  const { data, updateData } = useContext(HelloContext);
+  const { data } = useContext(HelloContext);
 
   return (
-    <div className="App">      
+    <div className="App">
       <BrowserRouter>
-        {data === true ? <Navbar />  : null}
+        {data === true ? <Navbar /> : null}
         <Routes>
-          <Route path='/' exact Component={Home}/>
-          <Route path='/about' exact Component={About}/>
-          <Route path='/contact' exact Component={Contact}/>
-          <Route path='/login' exact Component={Login}/>
+          <Route path="/" exact Component={Home} />
+          <Route path="/about" exact Component={About} />
+          <Route path="/contact" exact Component={Contact} />
+          <Route path="/login" exact Component={SpotifyAuthorization} />
         </Routes>
-        {data === true ? <Footer />  : null}
-        </BrowserRouter>
+        {data === true ? <Footer /> : null}
+      </BrowserRouter>
     </div>
   );
 }
 
-export default App;
-
-
-//# Login.js - react
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useAuth } from '../../components/AuthContext';
-import { useNavigate } from 'react-router-dom';
-
 function SpotifyAuthorization() {
   const { isLoggedIn, login } = useAuth();
   const [loading, setLoading] = useState(true);
-  const [authorizeURL, setAuthorizeURL] = useState('');
+  const [authorizeURL, setAuthorizeURL] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,17 +42,19 @@ function SpotifyAuthorization() {
 
     const checkSpotifyLoginStatus = async () => {
       try {
-        const response = await axios.get('http://spotifyorganizer.matgosoft.com/check-login', {
-          cancelToken: source.token,
-        });
+        const response = await axios.get(
+          "http://spotifyorganizer.domain.com/check-login",
+          {
+            cancelToken: source.token,
+          },
+        );
         const userIsLoggedIn = response.data.isLoggedIn;
         if (userIsLoggedIn) {
-          login(); // Update the context if the user is logged in
+          login();
         }
       } catch (error) {
         if (!axios.isCancel(error)) {
-          console.error('Error checking login status:', error.message);
-          // Handle other errors if needed
+          console.error("Error checking login status:", error.message);
         }
       } finally {
         setLoading(false);
@@ -70,65 +63,53 @@ function SpotifyAuthorization() {
 
     checkSpotifyLoginStatus();
 
-    // Clean up the effect if unmounting
     return () => {
-      source.cancel('Request canceled: Component unmounted');
+      source.cancel("Request canceled: Component unmounted");
     };
-  }, [login]); // 'login' added to the dependency array
+  }, [login]);
 
   const handleLogin = () => {
-    // Redirect the user to the Spotify login page
     window.location.href = authorizeURL;
   };
 
   useEffect(() => {
-    // Fetch the Spotify authorization URL
     const fetchSpotifyAuthURL = async () => {
       try {
-        const response = await axios.get('http://spotifyorganizer.matgosoft.com/login');
+        const response = await axios.get(
+          "http://spotifyorganizer.domain.com/login",
+        );
         setAuthorizeURL(response.data.authorizeURL);
       } catch (error) {
-        console.error('Error fetching Spotify authorization URL:', error.message);
-        // Handle errors if needed
+        console.error(
+          "Error fetching Spotify authorization URL:",
+          error.message,
+        );
       }
     };
 
     fetchSpotifyAuthURL();
-  }, []); // Empty dependency array to run only once when the component mounts
+  }, []);
 
   useEffect(() => {
-    // Check for a callback from Spotify
     const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
+    const code = urlParams.get("code");
 
     if (code) {
-      // Handle the Spotify callback logic here
       handleSpotifyCallback(code);
     }
-  }, []); // Empty dependency array to run only once when the component mounts
+  }, []);
 
   const handleSpotifyCallback = async (code) => {
-    console.log("handleSpotifyCallback 0");
     try {
-      // Make a request to your backend to exchange the code for an access token
-      const response = await axios.get(`http://spotifyorganizer.matgosoft.com/callback?code=${code}`);
-      console.log("handleSpotifyCallback response: ", response);
-      // Assuming your backend sends a success response upon successful authentication
+      const response = await axios.get(
+        `http://spotifyorganizer.domain.com/callback?code=${code}`,
+      );
       if (response.data.success) {
-        // Update the context
-        console.log("handleSpotifyCallback before login");
         login();
-        console.log("handleSpotifyCallback after login");
-        // Navigate the user back to the original login route
-        console.log("handleSpotifyCallback before navigate/login");
-        navigate('/login');
-        console.log("handleSpotifyCallback after navigate/login");
-      } else {
-        // Handle authentication failure
+        navigate("/login");
       }
     } catch (error) {
-      console.error('Error handling Spotify callback:', error.message);
-      // Handle errors if needed
+      console.error("Error handling Spotify callback:", error.message);
     }
   };
 
@@ -148,34 +129,38 @@ function SpotifyAuthorization() {
   );
 }
 
-export default SpotifyAuthorization;
+export default App;
+export { SpotifyAuthorization };
 
-
-//# index.js - nodejs
-import express from 'express';
-import session from 'express-session';
-import SpotifyWebApi from 'spotify-web-api-node';
-import cors from 'cors';
-import expressWs from 'express-ws';
+// --- Node.js backend part ---
+import express from "express";
+import session from "express-session";
+import SpotifyWebApi from "spotify-web-api-node";
+import cors from "cors";
+import expressWs from "express-ws";
 
 const app = express();
+
 const spotifyApi = new SpotifyWebApi({
-  clientId: 'myclientid',
-  clientSecret: 'myclientsecret',
-  redirectUri: 'http://spotifyorganizer.matgosoft.com/callback',
+  clientId: "myclientid",
+  clientSecret: "myclientsecret",
+  redirectUri: "http://spotifyorganizer.domain.com/callback",
 });
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // Check if the origin is allowed, or use a dynamic check based on your requirements
-    const allowedOrigins = ['http://so.matgosoft.com', 'http://so.matgosoft.com/login', 'http://spotifyorganizer.matgosoft.com'];
+    const allowedOrigins = [
+      "http://domain.com",
+      "http://domain.com/login",
+      "http://spotifyorganizer.domain.com",
+    ];
     if (allowedOrigins.includes(origin) || !origin) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -184,22 +169,18 @@ app.use(cors(corsOptions));
 
 app.use(
   session({
-    secret: 'your-secret-key',
+    secret: "your-secret-key",
     resave: false,
     saveUninitialized: true,
-  })
+  }),
 );
 
-// Enable WebSocket support
-const { getWss, applyTo } = expressWs(app);
-// WebSocket connection handling
-app.ws('/ws', (ws) => {
-  console.log('WebSocket connection established');
+const { getWss } = expressWs(app);
 
-  // Handle WebSocket communication
+app.ws("/ws", (ws) => {
+  console.log("WebSocket connection established");
 
-  // Example: Broadcast a message to all clients
-  ws.on('message', (message) => {
+  ws.on("message", (message) => {
     getWss().clients.forEach((client) => {
       if (client !== ws && client.readyState === WebSocket.OPEN) {
         client.send(message);
@@ -208,59 +189,49 @@ app.ws('/ws', (ws) => {
   });
 });
 
-
-app.get('/', (req, res) => {
-  res.json({msg:"hw1"});
+app.get("/", (req, res) => {
+  res.json({ msg: "hw1" });
 });
 
-app.get('/login', (req, res) => {
-  // Check if the user is already authenticated with Spotify
+app.get("/login", (req, res) => {
   if (req.session.spotifyAccessToken) {
-    // User is already logged in, redirect or handle accordingly
-    res.json({ message: 'User is already logged in.' });
+    res.json({ message: "User is already logged in." });
   } else {
-    // User is not logged in, initiate Spotify login
-    const scopes = ['user-library-read', 'user-library-modify'];
-    const redirectUri = 'http://so.matgosoft.com/'; // Update the redirect URI
-    const authorizeURL = spotifyApi.createAuthorizeURL(scopes, null, redirectUri);
-    res.json({ authorizeURL }); // Return the authorization URL to the React component
+    const scopes = ["user-library-read", "user-library-modify"];
+    const redirectUri = "http://domain.com/";
+    const authorizeURL = spotifyApi.createAuthorizeURL(
+      scopes,
+      null,
+      redirectUri,
+    );
+    res.json({ authorizeURL });
   }
 });
 
-  
-app.get('/callback', async (req, res) => {
+app.get("/callback", async (req, res) => {
   const { code } = req.query;
   try {
     const data = await spotifyApi.authorizationCodeGrant(code);
-    const accessToken = data.body['access_token'];
+    const accessToken = data.body["access_token"];
 
-    // Store the access token in the session
     req.session.spotifyAccessToken = accessToken;
     console.log("/callback ", req.session.spotifyAccessToken);
 
-    // Redirect the user to so.spotifyorganizer.com/login with the access token as a query parameter
-    res.redirect(`http://so.matgosoft.com/login?accessToken=${accessToken}`);
+    res.redirect(`http://domain.com/login?accessToken=${accessToken}`);
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).send('Error occurred while authenticating with Spotify.');
+    console.error("Error:", error);
+    res.status(500).send("Error occurred while authenticating with Spotify.");
   }
 });
 
-
-// Add a new endpoint to check if the user is logged in
-app.get('/check-login', (req, res) => {
+app.get("/check-login", (req, res) => {
   try {
-    // Check if the user is authenticated by looking at the session data
-  // Check if the user is authenticated by looking at the session data
-  const isLoggedIn = !!req.session.spotifyAccessToken;
-  console.log('isLoggedIn:', isLoggedIn);
-
-  // Respond with the login status
-  res.json({ isLoggedIn });
-
+    const isLoggedIn = !!req.session.spotifyAccessToken;
+    console.log("isLoggedIn:", isLoggedIn);
+    res.json({ isLoggedIn });
   } catch (error) {
-    console.error('Error in /check-login:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error in /check-login:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
