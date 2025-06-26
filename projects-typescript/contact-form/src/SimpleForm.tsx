@@ -1,89 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const SimpleForm: React.FC = () => {
-  // 1. Define the shape of your form data
   interface FormData {
     name: string;
-    surname: string; // Stays in the interface, but validation will make it optional
+    surname: string;
     email: string;
     phoneNumber: string;
     prefferedContact: string;
   }
 
-  // State to hold all form field values
   const [formData, setFormData] = useState<FormData>({
-    name: '',
-    surname: '',
-    email: '',
-    phoneNumber: '',
-    prefferedContact: '',
+    name: "",
+    surname: "",
+    email: "",
+    phoneNumber: "",
+    prefferedContact: "",
   });
 
-  // State for the general submission message (success or overall error)
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
 
   // State to hold validation errors for each field.
   // Using an empty object as initial state to avoid 'undefined' issues.
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  // Function to handle changes in input fields
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
 
-    // Always use the functional update form for setFormData
-    // when the new state depends on the previous state.
-    setFormData(prevData => ({
-      ...prevData, // Spread existing formData to keep other field values
-      [name]: value, // Update the specific field by its 'name'
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
     }));
 
-    // Clear specific error message for the field being changed
-    // and also clear the combined email/phone error if one of them is being typed into.
-    setErrors(prevErrors => ({
+    setErrors((prevErrors) => ({
       ...prevErrors,
-      [name]: '', // Clear the error for the current field
-      ...(name === 'email' || name === 'phoneNumber' ? { emailOrPhoneNumber: '' } : {}) // Clear the combined error
+      [name]: "", // Clear the error for the current field
+      ...(name === "email" || name === "phoneNumber"
+        ? { emailOrPhoneNumber: "" }
+        : {}), // Clear the combined error
     }));
 
     // Clear the general submit message as the user starts typing again
     setSubmitMessage(null);
   };
 
-  // Function to validate all form fields
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {}; // Object to collect all errors
 
-    // Name is required
     if (!formData.name.trim()) {
-      newErrors.name = 'Name is required.';
+      newErrors.name = "Name is required.";
     }
 
     // Surname is optional - no validation added here to make it required.
-    // If you wanted to validate its format (e.g., only letters), you'd add it here.
 
     // Email OR Phone Number is required (at least one)
-    const isEmailProvided = formData.email.trim() !== '';
-    const isPhoneNumberProvided = formData.phoneNumber.trim() !== '';
+    const isEmailProvided = formData.email.trim() !== "";
+    const isPhoneNumberProvided = formData.phoneNumber.trim() !== "";
 
     if (!isEmailProvided && !isPhoneNumberProvided) {
-      newErrors.emailOrPhoneNumber = 'Please provide either an email address OR a phone number.';
+      newErrors.emailOrPhoneNumber =
+        "Please provide either an email address OR a phone number.";
     }
 
     // Validate Email format if email is provided
     if (isEmailProvided && !/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address.';
+      newErrors.email = "Please enter a valid email address.";
     }
 
     // Validate Phone Number format if phone number is provided
     // This regex checks for at least 9 digits, allowing spaces (which are removed for validation)
-    if (isPhoneNumberProvided && !/^\d{9,}$/.test(formData.phoneNumber.replace(/\s/g, ''))) {
-      newErrors.phoneNumber = 'Phone number must contain at least 9 digits (spaces are ignored).';
+    if (
+      isPhoneNumberProvided &&
+      !/^\d{9,}$/.test(formData.phoneNumber.replace(/\s/g, ""))
+    ) {
+      newErrors.phoneNumber =
+        "Phone number must contain at least 9 digits (spaces are ignored).";
     }
 
     // Preferred Contact is required ONLY if both Email AND Phone Number are provided
-    const shouldShowPreferredContactField = isEmailProvided && isPhoneNumberProvided;
+    const shouldShowPreferredContactField =
+      isEmailProvided && isPhoneNumberProvided;
     if (shouldShowPreferredContactField && !formData.prefferedContact.trim()) {
-        newErrors.prefferedContact = 'Preferred contact method is required when both Email and Phone are provided.';
+      newErrors.prefferedContact =
+        "Preferred contact method is required when both Email and Phone are provided.";
     }
 
     // Update the errors state
@@ -93,30 +93,30 @@ const SimpleForm: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Function to handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault(); // Prevents the browser's default form submission (page reload)
 
-    if (validateForm()) { // Call our validation function
-      setSubmitMessage('Form submitted successfully!');
-      console.log('Form data:', formData); // Log data to console for inspection
+    if (validateForm()) {
+      setSubmitMessage("Form submitted successfully!");
+      console.log("Form data:", formData); // Log data to console for inspection
       // Clear the form fields after successful submission
       setFormData({
-        name: '',
-        surname: '',
-        email: '',
-        phoneNumber: '',
-        prefferedContact: '',
+        name: "",
+        surname: "",
+        email: "",
+        phoneNumber: "",
+        prefferedContact: "",
       });
       setErrors({}); // Clear any previous errors
     } else {
-      setSubmitMessage('Please correct the errors in the form.');
+      setSubmitMessage("Please correct the errors in the form.");
       // Specific errors are already set by validateForm and displayed under fields
     }
   };
 
   // Logic for dynamic display of the Preferred Contact field
-  const showPreferredContactField = formData.email.trim() !== '' && formData.phoneNumber.trim() !== '';
+  const showPreferredContactField =
+    formData.email.trim() !== "" && formData.phoneNumber.trim() !== "";
 
   return (
     <div>
@@ -124,7 +124,11 @@ const SimpleForm: React.FC = () => {
 
       {/* General submission message display */}
       {submitMessage && (
-        <p style={{ color: submitMessage.includes('successfully') ? 'green' : 'red' }}>
+        <p
+          style={{
+            color: submitMessage.includes("successfully") ? "green" : "red",
+          }}
+        >
           {submitMessage}
         </p>
       )}
@@ -141,7 +145,9 @@ const SimpleForm: React.FC = () => {
             onChange={handleChange}
           />
           {/* Display error for 'name' if it exists */}
-          {errors.name && <p style={{ color: 'red', fontSize: '0.8em' }}>{errors.name}</p>}
+          {errors.name && (
+            <p style={{ color: "red", fontSize: "0.8em" }}>{errors.name}</p>
+          )}
         </div>
 
         {/* Surname Field (optional) */}
@@ -161,14 +167,16 @@ const SimpleForm: React.FC = () => {
         <div>
           <label htmlFor="email">Email:</label>
           <input
-            type="email" // Keeps browser's basic email validation, but our custom validation takes precedence
+            type="email" // Keeps browser's basic email validation, but custom validation takes precedence
             id="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
           />
           {/* Display error for 'email' if it exists */}
-          {errors.email && <p style={{ color: 'red', fontSize: '0.8em' }}>{errors.email}</p>}
+          {errors.email && (
+            <p style={{ color: "red", fontSize: "0.8em" }}>{errors.email}</p>
+          )}
         </div>
 
         {/* Phone Number Field */}
@@ -182,9 +190,17 @@ const SimpleForm: React.FC = () => {
             onChange={handleChange}
           />
           {/* Display error for 'phoneNumber' if it exists */}
-          {errors.phoneNumber && <p style={{ color: 'red', fontSize: '0.8em' }}>{errors.phoneNumber}</p>}
+          {errors.phoneNumber && (
+            <p style={{ color: "red", fontSize: "0.8em" }}>
+              {errors.phoneNumber}
+            </p>
+          )}
           {/* Display combined email OR phone error if it exists */}
-          {errors.emailOrPhoneNumber && <p style={{ color: 'red', fontSize: '0.8em' }}>{errors.emailOrPhoneNumber}</p>}
+          {errors.emailOrPhoneNumber && (
+            <p style={{ color: "red", fontSize: "0.8em" }}>
+              {errors.emailOrPhoneNumber}
+            </p>
+          )}
         </div>
 
         {/* Preferred Contact Field - Dynamically displayed */}
@@ -199,14 +215,16 @@ const SimpleForm: React.FC = () => {
               onChange={handleChange}
             />
             {/* Display error for 'prefferedContact' if it exists */}
-            {errors.prefferedContact && <p style={{ color: 'red', fontSize: '0.8em' }}>{errors.prefferedContact}</p>}
+            {errors.prefferedContact && (
+              <p style={{ color: "red", fontSize: "0.8em" }}>
+                {errors.prefferedContact}
+              </p>
+            )}
           </div>
         )}
 
         {/* Submit Button */}
-        <button type="submit">
-          Submit
-        </button>
+        <button type="submit">Submit</button>
       </form>
     </div>
   );

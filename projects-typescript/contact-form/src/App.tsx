@@ -1,13 +1,15 @@
-import { useState } from "react";
 import "./App.css";
 import SimpleForm from "./SimpleForm";
+import ReactHookForm from "./ReactHookForms";
+import ContactFormZod from "./ContactFormZod";
 
 function App() {
   return (
     <>
       <div className="App">
-        <h1>Contact Form</h1>
         <SimpleForm />
+        <ReactHookForm />
+        <ContactFormZod />
       </div>
     </>
   );
